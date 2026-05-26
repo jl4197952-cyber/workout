@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0a0a0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="徒手训练">
+<title>徒手训练日志</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --bg-card: #131318;
+    --bg-elevated: #1c1c24;
+    --border: #26262f;
+    --border-strong: #3a3a47;
+    --text: #ebe9e4;
+    --text-dim: #8b8a93;
+    --text-faint: #595862;
+    --accent: #4ade80;
+    --accent-dim: #4ade8028;
+    --success: #6ee787;
+    --success-dim: #6ee78718;
+    --serif: 'Fraunces', Georgia, serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: var(--sans); -webkit-font-smoothing: antialiased; overscroll-behavior: none; }
+  body { min-height: 100vh; padding-bottom: env(safe-area-inset-bottom); }
+
+  .header {
+    padding: calc(env(safe-area-inset-top) + 16px) 20px 12px;
+    background: var(--bg);
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-row { display: flex; align-items: baseline; justify-content: space-between; }
+  .title { font-family: var(--serif); font-weight: 600; font-size: 28px; letter-spacing: -0.02em; margin: 0; font-variation-settings: 'opsz' 144; }
+  .title em { font-style: italic; color: var(--accent); font-weight: 500; }
+  .date { font-family: var(--mono); font-size: 11px; color: var(--text-faint); letter-spacing: 0.05em; text-transform: uppercase; }
+
+  .day-tabs { display: flex; gap: 6px; margin-top: 14px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px; }
+  .day-tabs::-webkit-scrollbar { display: none; }
+  .day-tab {
+    flex: 1; min-width: 0; padding: 10px 12px;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+    color: var(--text-dim); font-family: var(--mono); font-size: 11px; font-weight: 500;
+    cursor: pointer; transition: all 0.15s; text-align: center; letter-spacing: 0.02em;
+  }
+  .day-tab .day-num { display: block; font-size: 14px; color: var(--text); margin-bottom: 2px; font-weight: 600; }
+  .day-tab.active { background: var(--accent); border-color: var(--accent); color: #052e1a; }
+  .day-tab.active .day-num { color: #052e1a; }
+  .day-tab.completed::after { content: '●'; color: var(--success); margin-left: 4px; font-size: 8px; }
+
+  .main { padding: 20px; }
+
+  .day-header { margin-bottom: 18px; }
+  .day-meta { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px; }
+  .day-title { font-family: var(--serif); font-size: 32px; font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 14px; font-variation-settings: 'opsz' 144; }
+  .day-title em { color: var(--accent); font-style: italic; }
+
+  .progress-row { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; color: var(--text-dim); }
+  .progress-bar { flex: 1; height: 4px; background: var(--bg-card); border-radius: 2px; overflow: hidden; position: relative; }
+  .progress-fill { position: absolute; inset: 0; width: 0%; background: var(--accent); transition: width 0.3s ease-out; border-radius: 2px; }
+
+  .exercise { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 16px; margin-bottom: 12px; transition: border-color 0.2s; }
+  .exercise.done { border-color: var(--success-dim); background: linear-gradient(180deg, var(--success-dim) 0%, var(--bg-card) 100%); }
+  .exercise-num { font-family: var(--mono); font-size: 10px; color: var(--text-faint); letter-spacing: 0.1em; margin-bottom: 4px; }
+  .exercise-name { font-family: var(--serif); font-size: 20px; font-weight: 500; line-height: 1.25; letter-spacing: -0.01em; margin: 0 0 4px; font-variation-settings: 'opsz' 72; }
+  .exercise-muscle { display: inline-block; font-family: var(--mono); font-size: 10px; color: var(--accent); background: var(--accent-dim); padding: 2px 7px; border-radius: 4px; margin-bottom: 12px; letter-spacing: 0.05em; }
+
+  .specs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .spec { background: var(--bg-elevated); padding: 10px 12px; border-radius: 8px; }
+  .spec-label { font-family: var(--mono); font-size: 9px; color: var(--text-faint); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
+  .spec-value { font-family: var(--mono); font-size: 14px; color: var(--text); font-weight: 600; }
+
+  .variation-row { background: var(--bg-elevated); padding: 12px; border-radius: 8px; margin-bottom: 14px; border-left: 3px solid var(--accent); }
+  .variation-label { font-family: var(--mono); font-size: 9px; color: var(--text-faint); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .variation-list { font-family: var(--sans); font-size: 12px; line-height: 1.6; color: var(--text-dim); }
+  .variation-list .level { color: var(--text); font-weight: 600; }
+  .variation-list .arrow { color: var(--text-faint); margin: 0 4px; }
+  .actual-row { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); display: flex; align-items: center; gap: 8px; }
+  .actual-label { font-family: var(--mono); font-size: 10px; color: var(--text-dim); flex-shrink: 0; }
+  .actual-input { flex: 1; background: transparent; border: none; border-bottom: 1px solid var(--border-strong); color: var(--text); font-family: var(--mono); font-size: 13px; padding: 4px 0; outline: none; }
+  .actual-input:focus { border-color: var(--accent); }
+  .actual-input::placeholder { color: var(--text-faint); }
+
+  .sets { display: flex; gap: 8px; flex-wrap: wrap; }
+  .set-btn { width: 44px; height: 44px; border-radius: 10px; background: var(--bg-elevated); border: 1px solid var(--border-strong); color: var(--text-dim); font-family: var(--mono); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; user-select: none; }
+  .set-btn:active { transform: scale(0.92); }
+  .set-btn.done { background: var(--success); border-color: var(--success); color: #053d12; }
+
+  .notes { font-family: var(--sans); font-size: 12px; line-height: 1.5; color: var(--text-dim); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-style: italic; }
+
+  .info-block { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 12px; }
+  .info-title { font-family: var(--serif); font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 10px; }
+  .info-title em { color: var(--accent); font-style: italic; }
+  .info-block ul { padding-left: 18px; margin: 8px 0; font-size: 14px; line-height: 1.7; color: var(--text-dim); }
+  .info-block li { margin-bottom: 4px; }
+  .info-block li strong { color: var(--text); font-weight: 600; }
+  .info-block p { font-size: 14px; line-height: 1.65; color: var(--text-dim); margin: 8px 0; }
+  .info-block p strong { color: var(--text); font-weight: 600; }
+
+  .footer { padding: 24px 20px 32px; display: flex; gap: 10px; border-top: 1px solid var(--border); margin-top: 30px; }
+  .btn { flex: 1; padding: 14px; background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 10px; color: var(--text-dim); font-family: var(--mono); font-size: 12px; font-weight: 500; cursor: pointer; letter-spacing: 0.05em; transition: all 0.15s; }
+  .btn:active { transform: scale(0.97); }
+  .btn-danger { color: #ff6b6b; border-color: #ff6b6b40; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-row">
+    <h1 class="title">徒手<em>训练</em></h1>
+    <span class="date" id="date"></span>
+  </div>
+  <div class="day-tabs" id="dayTabs"></div>
+</header>
+
+<main class="main" id="main"></main>
+
+<div class="footer">
+  <button class="btn" onclick="resetDay()">重置本日</button>
+  <button class="btn btn-danger" onclick="resetAll()">清空全部</button>
+</div>
+
+<script>
+const PLAN = {
+  day1: {
+    title: '推 · 胸 / 肩 / 三头',
+    focus: '推',
+    exercises: [
+      { 
+        name: '双杠臂屈伸', 
+        muscle: '胸 + 三头 主项',
+        variation: '<span class="level">L1</span> 跳起负重慢放（4 秒下放）<span class="arrow">→</span> <span class="level">L2</span> 标准双杠 <span class="arrow">→</span> <span class="level">L3</span> 慢节奏（3秒下/1秒停） <span class="arrow">→</span> <span class="level">L4</span> 负重双杠（背包加书）',
+        sets: 4, reps: '6-10', rest: '90秒', 
+        notes: '身体微前倾刺激胸，垂直则刺激三头。下到大臂与地面平行' 
+      },
+      { 
+        name: '俯卧撑', 
+        muscle: '胸 + 三头',
+        variation: '<span class="level">L1</span> 跪姿俯卧撑 <span class="arrow">→</span> <span class="level">L2</span> 标准俯卧撑 <span class="arrow">→</span> <span class="level">L3</span> 钻石俯卧撑 <span class="arrow">→</span> <span class="level">L4</span> 弓箭手俯卧撑 <span class="arrow">→</span> <span class="level">L5</span> 单臂俯卧撑',
+        sets: 4, reps: '12-15', rest: '60秒', 
+        notes: '身体一直线，胸离地一拳。能做满 15 次就升级到下一变式' 
+      },
+      { 
+        name: '派克俯卧撑', 
+        muscle: '肩 主项',
+        variation: '<span class="level">L1</span> 标准派克（屁股翘高呈倒 V） <span class="arrow">→</span> <span class="level">L2</span> 脚抬高派克（脚放台阶/凳子上） <span class="arrow">→</span> <span class="level">L3</span> 靠墙倒立俯卧撑',
+        sets: 3, reps: '8-12', rest: '60秒', 
+        notes: '★ 这是徒手练肩的关键动作。头点地，控制下放' 
+      },
+      { 
+        name: '上斜俯卧撑（双杠上）', 
+        muscle: '胸 收尾',
+        variation: '<span class="level">手放双杠上</span>，脚在地上，做俯卧撑。<br>难度调节：双脚距离双杠越远越简单',
+        sets: 3, reps: '力竭', rest: '60秒', 
+        notes: '做到做不动为止，泵感收尾' 
+      },
+      { 
+        name: '平板支撑', 
+        muscle: '核心',
+        variation: '<span class="level">L1</span> 标准平板 <span class="arrow">→</span> <span class="level">L2</span> 单腿抬起平板 <span class="arrow">→</span> <span class="level">L3</span> 侧平板（左右各做）',
+        sets: 3, reps: '45-60秒', rest: '45秒', 
+        notes: '收紧腹臀，身体一直线，别塌腰' 
+      },
+    ]
+  },
+  day2: {
+    title: '拉 · 背 / 二头',
+    focus: '拉',
+    exercises: [
+      { 
+        name: '正握引体向上（宽于肩）', 
+        muscle: '背阔 主项',
+        variation: '<span class="level">L1</span> 跳起慢放（4 秒下放） <span class="arrow">→</span> <span class="level">L2</span> 标准引体 <span class="arrow">→</span> <span class="level">L3</span> 慢节奏引体 <span class="arrow">→</span> <span class="level">L4</span> 负重引体',
+        sets: 4, reps: '力竭（目标 6-10）', rest: '120秒', 
+        notes: '★ 先肩胛下沉（耳朵远离肩），再用背阔启动。下巴过杆，不甩' 
+      },
+      { 
+        name: '反握引体向上（窄于肩）', 
+        muscle: '背 + 二头',
+        variation: '<span class="level">L1</span> 跳起慢放 <span class="arrow">→</span> <span class="level">L2</span> 标准反握引体 <span class="arrow">→</span> <span class="level">L3</span> 慢节奏反握',
+        sets: 3, reps: '8-10', rest: '90秒', 
+        notes: '二头刺激更强。但二头每周练这一项就够，别另外加弯举' 
+      },
+      { 
+        name: '澳式划船（身体在单杠下方）', 
+        muscle: '背 厚度',
+        variation: '<span class="level">L1</span> 膝盖弯曲，身体倾斜 45° <span class="arrow">→</span> <span class="level">L2</span> 双腿伸直水平 <span class="arrow">→</span> <span class="level">L3</span> 脚抬高（放凳子上）',
+        sets: 3, reps: '12-15', rest: '60秒', 
+        notes: '胸触杆，身体绷直。拉到胸口下方，不是脖子' 
+      },
+      { 
+        name: '单杠悬垂举腿', 
+        muscle: '下腹 + 核心',
+        variation: '<span class="level">L1</span> 悬垂屈膝抬腿 <span class="arrow">→</span> <span class="level">L2</span> 悬垂直腿到 90° <span class="arrow">→</span> <span class="level">L3</span> 悬垂直腿到杆',
+        sets: 3, reps: '12-15', rest: '60秒', 
+        notes: '控制下放，别甩腿借力' 
+      },
+      { 
+        name: '死悬挂', 
+        muscle: '握力 + 肩稳定',
+        variation: '<span class="level">L1</span> 双手悬挂 30 秒 <span class="arrow">→</span> <span class="level">L2</span> 双手悬挂 45-60 秒 <span class="arrow">→</span> <span class="level">L3</span> 单手悬挂',
+        sets: 3, reps: '30-45秒', rest: '60秒', 
+        notes: '撑到掉为止。握力是引体进阶的瓶颈，要专项练' 
+      },
+    ]
+  },
+  day3: {
+    title: '腿 + 核心',
+    focus: '腿',
+    exercises: [
+      { 
+        name: '保加利亚分腿蹲', 
+        muscle: '腿 + 臀 主项',
+        variation: '<span class="level">L1</span> 标准保加利亚（后腿放台阶） <span class="arrow">→</span> <span class="level">L2</span> 慢节奏（3秒下） <span class="arrow">→</span> <span class="level">L3</span> 单腿手枪蹲（无支撑）',
+        sets: 4, reps: '12 / 腿', rest: '90秒', 
+        notes: '★ 徒手练腿之王。后腿放凳子或台阶上，前腿主导发力' 
+      },
+      { 
+        name: '跳深蹲', 
+        muscle: '股四头 爆发',
+        variation: '<span class="level">L1</span> 标准徒手深蹲 <span class="arrow">→</span> <span class="level">L2</span> 跳深蹲（蹲到底爆发跳起） <span class="arrow">→</span> <span class="level">L3</span> 单腿深蹲过渡',
+        sets: 4, reps: '12-15', rest: '60秒', 
+        notes: '下蹲后爆发跳起，落地缓冲' 
+      },
+      { 
+        name: '单腿硬拉（自重）', 
+        muscle: '股二头 + 平衡',
+        variation: '<span class="level">L1</span> 扶墙单腿硬拉 <span class="arrow">→</span> <span class="level">L2</span> 无支撑单腿硬拉 <span class="arrow">→</span> <span class="level">L3</span> 慢节奏单腿硬拉',
+        sets: 3, reps: '10 / 腿', rest: '60秒', 
+        notes: '训练后链和平衡，徒手党练腘绳肌的关键动作' 
+      },
+      { 
+        name: '行进弓步', 
+        muscle: '腿 + 臀',
+        variation: '<span class="level">L1</span> 原地弓步 <span class="arrow">→</span> <span class="level">L2</span> 行进弓步 <span class="arrow">→</span> <span class="level">L3</span> 跳跃换腿弓步',
+        sets: 3, reps: '12 / 腿', rest: '60秒', 
+        notes: '步幅大，后膝接近地面不触地' 
+      },
+      { 
+        name: '单腿提踵', 
+        muscle: '小腿',
+        variation: '<span class="level">L1</span> 双腿提踵 <span class="arrow">→</span> <span class="level">L2</span> 单腿提踵（站台阶边） <span class="arrow">→</span> <span class="level">L3</span> 单腿提踵 + 慢节奏',
+        sets: 3, reps: '15 / 腿', rest: '45秒', 
+        notes: '站台阶边，脚跟下沉再充分上提' 
+      },
+      { 
+        name: '悬垂举腿', 
+        muscle: '下腹',
+        variation: '<span class="level">L1</span> 屈膝悬垂举腿 <span class="arrow">→</span> <span class="level">L2</span> 直腿到 90° <span class="arrow">→</span> <span class="level">L3</span> 直腿到杆',
+        sets: 3, reps: '10-15', rest: '60秒', 
+        notes: '控制为主，别甩' 
+      },
+    ]
+  },
+  day4: {
+    title: '上肢综合',
+    focus: '综合',
+    exercises: [
+      { 
+        name: '引体向上', 
+        muscle: '背 维持',
+        variation: '同 Day 2 的引体变式，但今天用前一档难度（不冲极限）',
+        sets: 3, reps: '6-8', rest: '90秒', 
+        notes: '维持背部刺激，留余力给后面动作' 
+      },
+      { 
+        name: '双杠臂屈伸', 
+        muscle: '胸 + 三头',
+        variation: '同 Day 1 的双杠变式，今天用同档或前一档',
+        sets: 3, reps: '8-10', rest: '90秒', 
+        notes: '维持胸部刺激' 
+      },
+      { 
+        name: '弓箭手俯卧撑', 
+        muscle: '胸 单侧',
+        variation: '<span class="level">L1</span> 宽距俯卧撑 <span class="arrow">→</span> <span class="level">L2</span> 弓箭手俯卧撑 <span class="arrow">→</span> <span class="level">L3</span> 单臂辅助俯卧撑',
+        sets: 3, reps: '6-8 / 边', rest: '60秒', 
+        notes: '一只手承担大部分重量，单侧发力' 
+      },
+      { 
+        name: '派克俯卧撑或墙倒立', 
+        muscle: '肩',
+        variation: '<span class="level">L1</span> 派克俯卧撑 <span class="arrow">→</span> <span class="level">L2</span> 脚抬高派克 <span class="arrow">→</span> <span class="level">L3</span> 靠墙倒立悬停 <span class="arrow">→</span> <span class="level">L4</span> 靠墙倒立俯卧撑',
+        sets: 3, reps: '8-10', rest: '60秒', 
+        notes: '肩部刺激不能少，否则肩部维度跟不上' 
+      },
+      { 
+        name: 'L-sit（双杠）', 
+        muscle: '★ 核心王牌',
+        variation: '<span class="level">L1</span> 屈膝 L-sit（双杠上，膝盖抬起） <span class="arrow">→</span> <span class="level">L2</span> 单腿 L-sit <span class="arrow">→</span> <span class="level">L3</span> 完整 L-sit（双腿伸直水平）',
+        sets: 3, reps: '力竭（10-30秒）', rest: '60秒', 
+        notes: '★ 徒手党核心终极动作。腹肌轮廓的塑造神器' 
+      },
+      { 
+        name: '单杠悬垂举腿', 
+        muscle: '下腹',
+        variation: '同 Day 2 / Day 3 的变式',
+        sets: 3, reps: '10-15', rest: '60秒', 
+        notes: '收尾，控制为主' 
+      },
+    ]
+  }
+};
+
+const PRINCIPLES_HTML = `
+  <div class="info-block">
+    <h2 class="info-title">徒手训练<em>怎么进阶</em></h2>
+    <p>没有"加重量"的概念 — 通过 <strong>更难的动作变式</strong> 来增加难度。每个动作都标了 L1 → L2 → L3 的难度递进。</p>
+    <p><strong>升级规则</strong>：当一个动作能稳定做满目标次数的<strong>上限</strong> × <strong>全部组数</strong>，就升级到下一变式。例如：标准俯卧撑能稳定 4×15，下次改做钻石俯卧撑。</p>
+    <p><strong>退阶规则</strong>：升级后做不到目标次数下限？退回前一档，把组数加一组。</p>
+  </div>
+
+  <div class="info-block">
+    <h2 class="info-title">两大<em>核心动作</em></h2>
+    <p><strong>引体向上 + 双杠臂屈伸</strong> = 徒手训练的"卧推 + 深蹲"。这两个动作的进阶速度决定你整体的训练成果。</p>
+    <p>每周保证它们各练 2 次（Day 1+4 双杠；Day 2+4 引体），3 个月你的背和胸会有肉眼可见的变化。</p>
+  </div>
+
+  <div class="info-block">
+    <h2 class="info-title">引体<em>做不够数</em>？</h2>
+    <ul>
+      <li><strong>跳起慢放</strong>：跳上去，下巴在杆上，然后用 4 秒慢慢下放</li>
+      <li><strong>澳式划船加量</strong>：把澳式从 3 组加到 4-5 组</li>
+      <li><strong>死悬挂练握力</strong>：握力差是引体的隐藏瓶颈</li>
+      <li>坚持 3 周，引体次数会明显涨</li>
+    </ul>
+  </div>
+
+  <div class="info-block">
+    <h2 class="info-title">为什么<em>不练手臂孤立</em></h2>
+    <p>引体已经狠狠练了二头，双杠已经狠狠练了三头。徒手没有耸肩、直立划船等动作，斜方肌自然不会过度发达。</p>
+    <p>你想要的"均衡轮廓"，按这个计划做就是。<strong>不要另外加弯举或臂屈伸专项训练</strong>。</p>
+  </div>
+
+  <div class="info-block">
+    <h2 class="info-title">饮食<em>速查</em></h2>
+    <ul>
+      <li><strong>总热量</strong>：2200-2400 kcal/天</li>
+      <li><strong>蛋白质</strong>：140-160g/天</li>
+      <li><strong>训练后</strong>：30 分钟内一勺分离乳清蛋白粉 + 水/牛奶</li>
+      <li><strong>每餐都要有蛋白</strong>：30-40g</li>
+      <li><strong>蔬菜管饱</strong>，少喝甜饮料</li>
+    </ul>
+  </div>
+
+  <div class="info-block">
+    <h2 class="info-title">必须<em>做的事</em></h2>
+    <ul>
+      <li>训练前热身 <strong>5-8 分钟</strong>（关节绕环 + 几组俯卧撑预热）</li>
+      <li>每晚睡 <strong>7-8 小时</strong>（比饮食还重要）</li>
+      <li>每周固定时间称重 1 次</li>
+      <li>每月拍照 1 次（镜子不会骗你）</li>
+      <li>记录每次用的变式难度，进步看得见</li>
+    </ul>
+  </div>
+
+  <div class="info-block">
+    <h2 class="info-title">公园训练<em>小贴士</em></h2>
+    <ul>
+      <li><strong>找一个安静角落</strong>：免得引人围观影响节奏</li>
+      <li><strong>带条毛巾</strong>：擦汗 / 垫平板支撑 / 包杠（如果杠太粗）</li>
+      <li><strong>带瓶水</strong>：脱水会让你少做 30% 的次数</li>
+      <li><strong>避开正午</strong>：早上 7-9 点或傍晚 5-7 点最舒服</li>
+      <li><strong>下雨天</strong>：可以转室内做俯卧撑/深蹲/平板，单双杠动作跳过即可，下次补</li>
+    </ul>
+  </div>
+`;
+
+let state = loadState();
+let currentDay = state.currentDay || 'day1';
+
+function loadState() {
+  try {
+    const s = localStorage.getItem('parkWorkoutState');
+    return s ? JSON.parse(s) : { sets: {}, weights: {}, currentDay: 'day1' };
+  } catch (e) { return { sets: {}, weights: {}, currentDay: 'day1' }; }
+}
+function saveState() {
+  try { localStorage.setItem('parkWorkoutState', JSON.stringify(state)); } catch (e) {}
+}
+function toggleSet(dayKey, exIdx, setIdx) {
+  const key = `${dayKey}_${exIdx}_${setIdx}`;
+  state.sets[key] = !state.sets[key];
+  saveState();
+  render();
+}
+function saveActualLevel(dayKey, exIdx, value) {
+  state.weights[`${dayKey}_${exIdx}_actual`] = value;
+  saveState();
+}
+function switchDay(day) {
+  currentDay = day;
+  state.currentDay = day;
+  saveState();
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function resetDay() {
+  if (!confirm('重置本日所有打勾记录？')) return;
+  Object.keys(state.sets).forEach(k => { if (k.startsWith(currentDay + '_')) delete state.sets[k]; });
+  saveState();
+  render();
+}
+function resetAll() {
+  if (!confirm('清空全部数据（包括所有日记录和变式难度）？')) return;
+  state = { sets: {}, weights: {}, currentDay: 'day1' };
+  saveState();
+  currentDay = 'day1';
+  render();
+}
+function isDayComplete(dayKey) {
+  if (dayKey === 'info') return false;
+  const exs = PLAN[dayKey].exercises;
+  for (let i = 0; i < exs.length; i++) {
+    for (let s = 0; s < exs[i].sets; s++) {
+      if (!state.sets[`${dayKey}_${i}_${s}`]) return false;
+    }
+  }
+  return true;
+}
+function getDayProgress(dayKey) {
+  const exs = PLAN[dayKey].exercises;
+  let total = 0, done = 0;
+  exs.forEach((ex, i) => {
+    for (let s = 0; s < ex.sets; s++) {
+      total++;
+      if (state.sets[`${dayKey}_${i}_${s}`]) done++;
+    }
+  });
+  return { done, total, pct: total ? (done/total*100) : 0 };
+}
+
+function render() {
+  const d = new Date();
+  document.getElementById('date').textContent = `${d.getMonth()+1}月${d.getDate()}日 · ${['日','一','二','三','四','五','六'][d.getDay()]}`;
+
+  const tabsEl = document.getElementById('dayTabs');
+  const days = [
+    { key: 'day1', label: '推', num: 'Day 1' },
+    { key: 'day2', label: '拉', num: 'Day 2' },
+    { key: 'day3', label: '腿', num: 'Day 3' },
+    { key: 'day4', label: '综合', num: 'Day 4' },
+    { key: 'info', label: '原则', num: 'Info' }
+  ];
+  tabsEl.innerHTML = days.map(d => {
+    const complete = d.key !== 'info' && isDayComplete(d.key) ? 'completed' : '';
+    const active = currentDay === d.key ? 'active' : '';
+    return `<div class="day-tab ${active} ${complete}" onclick="switchDay('${d.key}')">
+      <span class="day-num">${d.num}</span>${d.label}
+    </div>`;
+  }).join('');
+
+  const main = document.getElementById('main');
+  if (currentDay === 'info') {
+    main.innerHTML = `
+      <div class="day-header">
+        <div class="day-meta">PRINCIPLES / REFERENCE</div>
+        <h2 class="day-title">原则与<em>参考</em></h2>
+      </div>
+      ${PRINCIPLES_HTML}
+    `;
+    return;
+  }
+
+  const day = PLAN[currentDay];
+  const prog = getDayProgress(currentDay);
+  main.innerHTML = `
+    <div class="day-header">
+      <div class="day-meta">${currentDay.toUpperCase()} / ${day.focus}</div>
+      <h2 class="day-title">${day.title.replace(day.focus, `<em>${day.focus}</em>`)}</h2>
+      <div class="progress-row">
+        <div class="progress-bar"><div class="progress-fill" style="width:${prog.pct}%"></div></div>
+        <span>${prog.done}/${prog.total}</span>
+      </div>
+    </div>
+    ${day.exercises.map((ex, i) => {
+      let allDone = true;
+      const setBtns = [];
+      for (let s = 0; s < ex.sets; s++) {
+        const key = `${currentDay}_${i}_${s}`;
+        const done = state.sets[key];
+        if (!done) allDone = false;
+        setBtns.push(`<button class="set-btn ${done?'done':''}" onclick="toggleSet('${currentDay}',${i},${s})">${s+1}</button>`);
+      }
+      const actualKey = `${currentDay}_${i}_actual`;
+      const actualVal = state.weights[actualKey] || '';
+      return `
+        <div class="exercise ${allDone?'done':''}">
+          <div class="exercise-num">EXERCISE ${String(i+1).padStart(2,'0')}</div>
+          <h3 class="exercise-name">${ex.name}</h3>
+          <span class="exercise-muscle">${ex.muscle}</span>
+          <div class="specs">
+            <div class="spec"><div class="spec-label">组数 × 次数</div><div class="spec-value">${ex.sets} × ${ex.reps}</div></div>
+            <div class="spec"><div class="spec-label">组间休息</div><div class="spec-value">${ex.rest}</div></div>
+          </div>
+          <div class="variation-row">
+            <div class="variation-label">动作变式 · 难度进阶</div>
+            <div class="variation-list">${ex.variation}</div>
+            <div class="actual-row">
+              <span class="actual-label">今天做：</span>
+              <input class="actual-input" type="text" placeholder="如：L2 标准引体 × 8 次" value="${actualVal}" 
+                oninput="saveActualLevel('${currentDay}',${i},this.value)">
+            </div>
+          </div>
+          <div class="sets">${setBtns.join('')}</div>
+          <div class="notes">${ex.notes}</div>
+        </div>
+      `;
+    }).join('')}
+  `;
+}
+
+render();
+</script>
+</body>
+</html>
