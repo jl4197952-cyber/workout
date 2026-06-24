@@ -1,728 +1,226 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#0a0a0b">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="薄肌训练">
-<title>薄肌训练日志 · 178cm / 80kg · Upper/Lower</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #0a0a0b; --bg-card: #131318; --bg-elevated: #1c1c24;
-    --border: #26262f; --border-strong: #3a3a47;
-    --text: #ebe9e4; --text-dim: #8b8a93; --text-faint: #595862;
-    --accent: #a78bfa; --accent-dim: #a78bfa22;
-    --warm: #fbbf24; --warm-dim: #fbbf2418;
-    --stretch: #60a5fa; --stretch-dim: #60a5fa22;
-    --success: #6ee787; --success-dim: #6ee78718;
-    --trend: #f97362; --trend-dim: #f9736218;
-    --serif: 'Fraunces', Georgia, serif;
-    --mono: 'JetBrains Mono', ui-monospace, monospace;
-    --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
-  }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: var(--sans); -webkit-font-smoothing: antialiased; overscroll-behavior: none; }
-  body { min-height: 100vh; padding-bottom: env(safe-area-inset-bottom); }
-  .header { padding: calc(env(safe-area-inset-top) + 16px) 20px 12px; background: var(--bg); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); }
-  .header-row { display: flex; align-items: baseline; justify-content: space-between; }
-  .title { font-family: var(--serif); font-weight: 600; font-size: 26px; letter-spacing: -0.02em; margin: 0; font-variation-settings: 'opsz' 144; }
-  .title em { font-style: italic; color: var(--accent); font-weight: 500; }
-  .title .sub { display:block; font-family: var(--mono); font-size: 10px; color: var(--text-faint); letter-spacing: 0.1em; margin-top: 2px; font-weight: 500; }
-  .date { font-family: var(--mono); font-size: 11px; color: var(--text-faint); letter-spacing: 0.05em; text-transform: uppercase; }
-  .day-tabs { display: flex; gap: 6px; margin-top: 14px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px; }
-  .day-tabs::-webkit-scrollbar { display: none; }
-  .day-tab { flex: 1; min-width: 0; padding: 10px 8px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; color: var(--text-dim); font-family: var(--mono); font-size: 10px; font-weight: 500; cursor: pointer; transition: all 0.15s; text-align: center; }
-  .day-tab .day-num { display: block; font-size: 13px; color: var(--text); margin-bottom: 2px; font-weight: 600; }
-  .day-tab.active { background: var(--accent); border-color: var(--accent); color: #0d0a1a; }
-  .day-tab.active .day-num { color: #0d0a1a; }
-  .day-tab.completed::after { content: '●'; color: var(--success); margin-left: 3px; font-size: 8px; }
-  .main { padding: 20px; }
-  .day-header { margin-bottom: 18px; }
-  .day-meta { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px; }
-  .day-title { font-family: var(--serif); font-size: 28px; font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 6px; font-variation-settings: 'opsz' 144; }
-  .day-title em { color: var(--accent); font-style: italic; }
-  .day-sub { font-family: var(--sans); font-size: 13px; color: var(--text-dim); margin: 0 0 14px; line-height: 1.5; }
-  .progress-row { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; color: var(--text-dim); }
-  .progress-bar { flex: 1; height: 4px; background: var(--bg-card); border-radius: 2px; overflow: hidden; position: relative; }
-  .progress-fill { position: absolute; inset: 0; width: 0%; background: var(--accent); transition: width 0.3s ease-out; border-radius: 2px; }
 
-  .section-divider { display: flex; align-items: center; gap: 12px; margin: 24px 0 14px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; }
-  .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  .section-divider.warmup { color: var(--warm); }
-  .section-divider.stretch { color: var(--stretch); }
-  .section-divider.main-workout { color: var(--accent); }
+<h2 class="sr-only">6岁男孩羽毛球16周教学计划，包含4个阶段和每日训练内容，点击切换阶段和周次</h2>
+<div style="padding:1rem 0 2rem;">
 
-  .exercise { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 16px; margin-bottom: 12px; transition: border-color 0.2s; }
-  .exercise.done { border-color: var(--success-dim); background: linear-gradient(180deg, var(--success-dim) 0%, var(--bg-card) 100%); }
-  .exercise.warmup-card { border-color: rgba(251,191,36,0.25); background: linear-gradient(180deg, var(--warm-dim) 0%, var(--bg-card) 100%); }
-  .exercise.warmup-card.done { border-color: var(--success-dim); background: linear-gradient(180deg, var(--success-dim) 0%, var(--bg-card) 100%); }
-  .exercise.stretch-card { border-color: rgba(96,165,250,0.2); }
-  .exercise.stretch-card.done { border-color: var(--success-dim); }
-  .exercise-num { font-family: var(--mono); font-size: 10px; color: var(--text-faint); letter-spacing: 0.1em; margin-bottom: 4px; }
-  .exercise-name { font-family: var(--serif); font-size: 19px; font-weight: 500; line-height: 1.25; letter-spacing: -0.01em; margin: 0 0 4px; font-variation-settings: 'opsz' 72; }
-  .exercise-muscle { display: inline-block; font-family: var(--mono); font-size: 10px; padding: 2px 7px; border-radius: 4px; margin-bottom: 12px; letter-spacing: 0.05em; }
-  .exercise-muscle.main { color: var(--accent); background: var(--accent-dim); }
-  .exercise-muscle.warm { color: var(--warm); background: var(--warm-dim); }
-  .exercise-muscle.cool { color: var(--stretch); background: var(--stretch-dim); }
-  .specs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-  .spec { background: var(--bg-elevated); padding: 10px 12px; border-radius: 8px; }
-  .spec-label { font-family: var(--mono); font-size: 9px; color: var(--text-faint); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
-  .spec-value { font-family: var(--mono); font-size: 14px; color: var(--text); font-weight: 600; }
-  .info-row { background: var(--bg-elevated); padding: 12px; border-radius: 8px; margin-bottom: 14px; }
-  .info-row.main { border-left: 3px solid var(--accent); }
-  .info-row.warm { border-left: 3px solid var(--warm); }
-  .info-row.cool { border-left: 3px solid var(--stretch); }
-  .info-row-label { font-family: var(--mono); font-size: 9px; color: var(--text-faint); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
-  .info-row-value { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.5; }
-  .actual-row { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); display: flex; align-items: center; gap: 8px; }
-  .actual-label { font-family: var(--mono); font-size: 10px; color: var(--text-dim); flex-shrink: 0; }
-  .actual-input { flex: 1; background: transparent; border: none; border-bottom: 1px solid var(--border-strong); color: var(--text); font-family: var(--mono); font-size: 13px; padding: 4px 0; outline: none; }
-  .actual-input:focus { border-color: var(--accent); }
-  .actual-input::placeholder { color: var(--text-faint); }
-  .save-btn { flex-shrink: 0; background: var(--accent-dim); border: 1px solid var(--accent); color: var(--accent); font-family: var(--mono); font-size: 10px; padding: 6px 10px; border-radius: 6px; cursor: pointer; letter-spacing: 0.05em; }
-  .save-btn:active { transform: scale(0.95); }
-  .trend-row { margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-  .trend-label { font-family: var(--mono); font-size: 9px; color: var(--trend); letter-spacing: 0.1em; text-transform: uppercase; margin-right: 2px; }
-  .trend-chip { font-family: var(--mono); font-size: 10px; color: var(--text-dim); background: var(--bg-elevated); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--border); }
-  .trend-chip.latest { color: var(--trend); border-color: var(--trend-dim); }
-  .trend-empty { font-family: var(--sans); font-size: 11px; color: var(--text-faint); font-style: italic; }
-  .sets { display: flex; gap: 8px; flex-wrap: wrap; }
-  .set-btn { width: 44px; height: 44px; border-radius: 10px; background: var(--bg-elevated); border: 1px solid var(--border-strong); color: var(--text-dim); font-family: var(--mono); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; user-select: none; }
-  .set-btn:active { transform: scale(0.92); }
-  .set-btn.done { background: var(--success); border-color: var(--success); color: #053d12; }
-  .notes { font-family: var(--sans); font-size: 12px; line-height: 1.5; color: var(--text-dim); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-style: italic; }
-
-  .info-block { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 12px; }
-  .info-block.highlight { border-color: var(--accent-dim); }
-  .info-block.warn { border-color: rgba(251,191,36,0.25); }
-  .info-title { font-family: var(--serif); font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 10px; }
-  .info-title em { color: var(--accent); font-style: italic; }
-  .info-block ul { padding-left: 18px; margin: 8px 0; font-size: 14px; line-height: 1.7; color: var(--text-dim); }
-  .info-block li { margin-bottom: 4px; }
-  .info-block li strong { color: var(--text); font-weight: 600; }
-  .info-block p { font-size: 14px; line-height: 1.65; color: var(--text-dim); margin: 8px 0; }
-  .info-block p strong { color: var(--text); font-weight: 600; }
-  .weight-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 10px 0; }
-  .weight-table th { font-family: var(--mono); font-size: 9px; color: var(--text-faint); letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 8px; border-bottom: 1px solid var(--border); text-align: left; }
-  .weight-table td { padding: 8px; border-bottom: 1px solid var(--border); color: var(--text-dim); vertical-align: middle; }
-  .weight-table td:first-child { color: var(--text); font-size: 13px; }
-  .weight-table td:last-child { color: var(--accent); font-family: var(--mono); font-size: 12px; font-weight: 600; }
-  .weight-table tr:last-child td { border-bottom: none; }
-  .footer { padding: 24px 20px 32px; display: flex; gap: 10px; border-top: 1px solid var(--border); margin-top: 30px; }
-  .btn { flex: 1; padding: 14px; background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 10px; color: var(--text-dim); font-family: var(--mono); font-size: 12px; font-weight: 500; cursor: pointer; letter-spacing: 0.05em; transition: all 0.15s; }
-  .btn:active { transform: scale(0.97); }
-  .btn-danger { color: #ff6b6b; border-color: #ff6b6b40; }
-</style>
-</head>
-<body>
-<header class="header">
-  <div class="header-row">
-    <h1 class="title">薄肌<em>训练</em><span class="sub">UPPER / LOWER · 2x/周</span></h1>
-    <span class="date" id="date"></span>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;">
+  <div style="width:44px;height:44px;border-radius:50%;background:var(--color-background-success);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+    <i class="ti ti-heart" style="font-size:20px;color:var(--color-text-success);" aria-hidden="true"></i>
   </div>
-  <div class="day-tabs" id="dayTabs"></div>
-</header>
-<main class="main" id="main"></main>
-<div class="footer">
-  <button class="btn" onclick="resetDay()">重置本日</button>
-  <button class="btn btn-danger" onclick="resetAll()">清空全部</button>
+  <div>
+    <div style="font-size:18px;font-weight:500;color:var(--color-text-primary);">6岁男孩羽毛球系统教学</div>
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-top:2px;">16周计划 · 亲子共练 · 每日1–2小时</div>
+  </div>
+  <div style="margin-left:auto;display:flex;gap:6px;">
+    <span style="background:var(--color-background-info);color:var(--color-text-info);font-size:12px;padding:3px 10px;border-radius:var(--border-radius-md);">4 阶段</span>
+    <span style="background:var(--color-background-success);color:var(--color-text-success);font-size:12px;padding:3px 10px;border-radius:var(--border-radius-md);">16 周</span>
+  </div>
 </div>
+
+<div id="ptabs" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:1rem;"></div>
+<div id="pgoal" style="margin-bottom:1rem;"></div>
+<div id="wtabs" style="display:flex;gap:8px;margin-bottom:1rem;"></div>
+<div id="sessions"></div>
+<div id="timebar" style="margin:8px 0 1.5rem;"></div>
+
+<button onclick="tt()" style="width:100%;display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);cursor:pointer;font-size:14px;color:var(--color-text-primary);margin-bottom:8px;">
+  <i class="ti ti-bulb" style="font-size:16px;color:var(--color-text-warning);" aria-hidden="true"></i>
+  家长教学贴士
+  <i class="ti ti-chevron-down" id="ta" style="margin-left:auto;font-size:14px;transition:transform 0.2s;" aria-hidden="true"></i>
+</button>
+<div id="tpanel" style="display:none;margin-bottom:1.5rem;"></div>
+
+<div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;">
+  <div style="font-size:14px;font-weight:500;margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--color-text-primary);">
+    <i class="ti ti-shopping-cart" style="font-size:16px;color:var(--color-text-secondary);" aria-hidden="true"></i>
+    装备建议
+  </div>
+  <div id="eq"></div>
+</div>
+
+</div>
+
 <script>
-const PLAN = {
-  upperA: {
-    title: '上肢 A · 胸推 + 肩前',
-    focus: '上肢A',
-    sub: '胸 / 肩前束 / 背阔宽度 / 肩中束(★) · 第1次刺激',
-    warmup: [
-      { name: '跑步机快走 / 慢跑', tag: '全身升温',
-        info: '5分钟，速度5-6km/h，让心率升到100-110bpm，关节开始发热',
-        sets: 1, reps: '5分钟',
-        notes: '不要冷着身体直接卧推，肩袖撕裂的主要原因之一' },
-      { name: '手臂绕环', tag: '肩关节激活',
-        info: '双臂向前绕大圈20次，再向后20次，感受肩关节充分活动',
-        sets: 1, reps: '前后各20次',
-        notes: '动作要慢，把整个肩关节画最大的圆' },
-      { name: '肩袖激活（弹力带外旋）', tag: '肩袖预热',
-        info: '弹力带绕手腕，双臂夹紧身体、前臂平行地面，做外旋动作。无弹力带可用1-2kg哑铃',
-        sets: 2, reps: '15次',
-        notes: '★ 现在一周两次上肢日，肩袖负荷变高，这组不能省' },
-      { name: '空杆卧推 / 极轻哑铃卧推', tag: '动作模式预热',
-        info: '用空杆或5kg哑铃做1组，专注感受肩胛收紧、胸肌发力的动作模式',
-        sets: 1, reps: '15次',
-        notes: '★ 告诉肌肉今天要做什么，不要跳过' },
-    ],
-    exercises: [
-      { name: '哑铃平板卧推', muscle: '胸 主项',
-        weight: '哑铃 14-16kg / 手（80kg体重版）',
-        sets: 4, reps: '8-10', rest: '90秒',
-        notes: '★ 主项，留1-2次余量。肩胛收紧贴凳，下放到胸口感受拉伸，不弹胸借力' },
-      { name: '双杠臂屈伸（身体前倾）', muscle: '胸 + 三头',
-        weight: '自重 80kg（能完成3×12后加负重）',
-        sets: 3, reps: '8-12', rest: '60-90秒',
-        notes: '身体前倾15-20°刺激胸。下到大臂平行地面' },
-      { name: '哑铃坐姿肩推', muscle: '肩前束 主项',
-        weight: '哑铃 12-15kg / 手',
-        sets: 3, reps: '10-12', rest: '90秒',
-        notes: '中等重量，不冲极限，不耸肩' },
-      { name: '高位下拉（宽握）', muscle: '背阔 宽度',
-        weight: '44-55kg（体重55-70%）',
-        sets: 3, reps: '10-12', rest: '90秒',
-        notes: '拉到锁骨位置，绝对不拉颈后。上臂往腋下方向用力' },
-      { name: '侧平举（哑铃或绳索）', muscle: '★★ 中束三角 核心',
-        weight: '哑铃 5-6kg / 手 ← 宁轻勿重',
-        sets: 3, reps: '12-15', rest: '60秒',
-        notes: '★★ V字感来源。现在一周练两次，重量更要克制，肘微屈，顶部停0.5秒' },
-      { name: '反向飞鸟', muscle: '后束三角',
-        weight: '哑铃 5-6kg / 手',
-        sets: 3, reps: '12-15', rest: '60秒',
-        notes: '让肩部立体。俯身，手臂微屈向两侧展开' },
-      { name: '卷腹', muscle: '上腹',
-        weight: '自重',
-        sets: 3, reps: '15-20', rest: '45秒',
-        notes: '顶峰收缩，慢起慢放' },
-    ],
-    stretches: [
-      { name: '门框胸部拉伸', tag: '拉伸 · 胸部',
-        info: '单臂屈肘抵住门框，身体前转远离手臂，感受胸大肌被拉长',
-        sets: 2, reps: '30秒 / 边',
-        notes: '★ 卧推后必拉，长期不拉会含胸驼背' },
-      { name: '三角肌交叉拉伸', tag: '拉伸 · 肩部',
-        info: '一只手水平横过胸前，另一只手压住肘部往身体方向拉',
-        sets: 2, reps: '30秒 / 边',
-        notes: '肩部和后背交界处有拉伸感' },
-      { name: '三头肌头顶拉伸', tag: '拉伸 · 三头',
-        info: '一只手举过头顶屈肘，另一只手压住肘部往后方轻推',
-        sets: 2, reps: '30秒 / 边',
-        notes: '手臂后侧有明显拉伸感' },
-    ]
-  },
-  lowerA: {
-    title: '下肢 A · 深蹲重点',
-    focus: '下肢A',
-    sub: '股四头 / 股二头孤立 / 小腿 · 第1次刺激',
-    warmup: [
-      { name: '跑步机慢跑', tag: '全身升温',
-        info: '5-8分钟，速度6-7km/h，让髋膝踝关节都热起来',
-        sets: 1, reps: '5-8分钟',
-        notes: '★ 腿日最容易受伤，热身绝对不能省' },
-      { name: '髋关节绕环', tag: '髋关节激活',
-        info: '单腿站立，另一条腿向前抬起，做髋关节大幅度绕圈，顺逆时针各10次，换腿',
-        sets: 1, reps: '各方向10次 / 腿',
-        notes: '深蹲时髋关节是主要受力点，必须充分活动' },
-      { name: '空蹲（慢速）', tag: '深蹲动作预热',
-        info: '徒手慢速深蹲，3秒下去、1秒停底、2秒起来',
-        sets: 2, reps: '10次',
-        notes: '找到深蹲发力感，膝盖对准脚尖，不要内扣' },
-      { name: '空杆 / 轻重量深蹲', tag: '负重深蹲预热',
-        info: '用空杆或30-40%正式重量做深蹲，激活核心保护机制',
-        sets: 2, reps: '10次',
-        notes: '★ 上正式重量前必须做这一步' },
-      { name: '踝关节绕环 + 小腿拉伸', tag: '踝关节灵活性',
-        info: '脚尖踩地，踝关节画圈各10次。再双手撑墙做小腿拉伸20秒',
-        sets: 1, reps: '各10次',
-        notes: '踝关节灵活度不够会导致深蹲蹲不下去，腰部代偿受伤' },
-    ],
-    exercises: [
-      { name: '杠铃深蹲', muscle: '腿 主项 · 重',
-        weight: '55-72kg 起步（体重70-90%）',
-        sets: 4, reps: '6-8', rest: '2分钟',
-        notes: '本周的重组。永远留1-2次余量。蹲到大腿平行地面，核心收紧，不要塌腰' },
-      { name: '腿举机', muscle: '股四头',
-        weight: '80-110kg',
-        sets: 3, reps: '10-12', rest: '90秒',
-        notes: '脚位中等偏高，脚尖略外八，膝盖对准脚尖方向' },
-      { name: '坐姿腿弯举', muscle: '股二头 孤立',
-        weight: '30-40kg',
-        sets: 3, reps: '12-15', rest: '60秒',
-        notes: '末端充分收缩，慢放2秒' },
-      { name: '站姿提踵', muscle: '小腿',
-        weight: '自重 或 杠铃 20-25kg',
-        sets: 3, reps: '15-20', rest: '45秒',
-        notes: '脚跟充分下沉再上提，顶部停1秒' },
-      { name: '卷腹', muscle: '上腹',
-        weight: '自重',
-        sets: 3, reps: '15-20', rest: '45秒',
-        notes: '顶峰收缩，慢起慢放' },
-    ],
-    stretches: [
-      { name: '股四头肌拉伸', tag: '拉伸 · 股四头',
-        info: '单腿站立，另一只手抓同侧脚踝往臀部方向拉',
-        sets: 2, reps: '30秒 / 边',
-        notes: '膝盖朝下指向地面，髋部前推效果更好' },
-      { name: '臀部拉伸（四字形）', tag: '拉伸 · 臀部',
-        info: '坐凳子，一脚踝放到对侧膝盖上，身体缓慢前倾',
-        sets: 2, reps: '45秒 / 边',
-        notes: '深蹲后必做，臀部紧张会引发腰痛' },
-      { name: '小腿撑墙拉伸', tag: '拉伸 · 小腿',
-        info: '双手撑墙，单腿向后退一大步，后腿膝盖伸直脚跟踩实地面',
-        sets: 2, reps: '30秒 / 边',
-        notes: '提踵后小腿容易抽筋，必须拉开' },
-    ]
-  },
-  upperB: {
-    title: '上肢 B · 背拉 + 肩中第2次',
-    focus: '上肢B',
-    sub: '背阔孤立 / 背厚度 / 上胸 / 肩中束(★) · 第2次刺激',
-    warmup: [
-      { name: '跑步机快走 / 慢跑', tag: '全身升温',
-        info: '5分钟，速度5-6km/h，让全身血液循环开',
-        sets: 1, reps: '5分钟',
-        notes: '背日尤其要充分热身——引体向上对肩袖压力大，冷肩容易受伤' },
-      { name: '肩部绕环（大幅度）', tag: '肩关节激活',
-        info: '双臂交替绕大圈，前后各20次',
-        sets: 1, reps: '前后各20次',
-        notes: '让肩关节充分活动，减少引体时肩袖的撞击风险' },
-      { name: '猫牛式', tag: '脊柱激活',
-        info: '四肢着地，吸气时腰部下沉、抬头（牛式），呼气时拱背、低头（猫式），交替进行',
-        sets: 1, reps: '10个来回',
-        notes: '背日最重要的热身——激活脊柱深层肌肉，保护腰椎' },
-      { name: '弹力带或轻重量直臂下压', tag: '背阔激活',
-        info: '用弹力带或绳索极轻重量做直臂下压，只用10-15%正式重量',
-        sets: 2, reps: '15次',
-        notes: '★ 先让背阔建立神经连接，引体时才不会全靠手臂拉' },
-      { name: '悬挂放松（单杠）', tag: '肩袖预热',
-        info: '双手抓单杠，完全放松悬挂20-30秒',
-        sets: 1, reps: '20-30秒',
-        notes: '建立引体的握力感' },
-    ],
-    exercises: [
-      { name: '引体向上（正握，中等握距）', muscle: '背阔 主项',
-        weight: '自重 80kg（目标4×6-10，做不够数用辅助机）',
-        sets: 4, reps: '力竭（目标6-10）', rest: '120秒',
-        notes: '★ 先肩胛下沉，再用背阔启动。不要先耸肩' },
-      { name: '上斜哑铃卧推', muscle: '上胸',
-        weight: '哑铃 10-12.5kg / 手',
-        sets: 3, reps: '10-12', rest: '90秒',
-        notes: '凳子调到30°，太陡变前束训练。上胸是薄肌感轮廓的关键' },
-      { name: '坐姿绳索划船（V把手）', muscle: '背 厚度',
-        weight: '40-50kg',
-        sets: 3, reps: '10-12', rest: '90秒',
-        notes: '肘部贴身，拉到腰部，不拉到胸，不要过分挺胸耸肩借力' },
-      { name: '直臂下拉（绳索）', muscle: '★ 背阔 纯孤立',
-        weight: '15-20kg',
-        sets: 3, reps: '12-15', rest: '60秒',
-        notes: '★ 双臂伸直，只靠背阔把绳索往下压，全程不带斜方肌' },
-      { name: '侧平举（哑铃或绳索）', muscle: '★★ 中束三角 核心',
-        weight: '哑铃 5-6kg / 手 ← 宁轻勿重',
-        sets: 3, reps: '12-15', rest: '60秒',
-        notes: '★★ 本周第二次刺激。感受优先于重量' },
-      { name: '哑铃二头弯举', muscle: '二头 维持',
-        weight: '哑铃 10-12kg / 手',
-        sets: 2, reps: '12-15', rest: '60秒',
-        notes: '只做2组——引体已经练了二头。上臂夹紧固定，只动前臂' },
-      { name: '绳索三头下压', muscle: '三头 维持',
-        weight: '20-25kg',
-        sets: 2, reps: '12-15', rest: '60秒',
-        notes: '只做2组——卧推/双杠已经练够三头' },
-      { name: '平板支撑', muscle: '核心稳定',
-        weight: '自重',
-        sets: 3, reps: '45-60秒', rest: '45秒',
-        notes: '收紧腹臀，身体一直线，别塌腰' },
-    ],
-    stretches: [
-      { name: '婴儿式背阔拉伸', tag: '拉伸 · 背阔',
-        info: '跪坐，前额触地，双手向前伸到最远',
-        sets: 2, reps: '45秒',
-        notes: '★ 练完背最重要的拉伸' },
-      { name: '单杠悬挂减压', tag: '拉伸 · 脊柱',
-        info: '双手抓单杠，完全放松悬挂，让脊柱在重力下自然拉长',
-        sets: 2, reps: '30秒',
-        notes: '背日训练后脊柱压力大，悬挂减压能明显缓解腰酸' },
-      { name: '二头肌墙壁拉伸', tag: '拉伸 · 二头',
-        info: '侧身贴墙，手掌贴墙（手指朝后），慢慢旋转身体远离墙壁',
-        sets: 2, reps: '30秒 / 边',
-        notes: '前臂内侧到二头有拉伸感' },
-      { name: '颈部侧拉伸', tag: '拉伸 · 颈肩',
-        info: '右手绕过头顶轻拉左侧头部，左耳靠近右肩',
-        sets: 1, reps: '30秒 / 边',
-        notes: '引体后颈肩容易紧张，必拉' },
-    ]
-  },
-  lowerB: {
-    title: '下肢 B · 髋铰链重点',
-    focus: '下肢B',
-    sub: '股二头 / 臀 / 股四头第2次 / 小腿第2次 · 第2次刺激',
-    warmup: [
-      { name: '跑步机慢跑', tag: '全身升温',
-        info: '5-8分钟，速度6-7km/h',
-        sets: 1, reps: '5-8分钟',
-        notes: '硬拉前冷着腰背是腰肌拉伤主因之一' },
-      { name: '髋关节绕环', tag: '髋关节激活',
-        info: '单腿站立，另一条腿向前抬起，做髋关节大幅度绕圈，顺逆时针各10次，换腿',
-        sets: 1, reps: '各方向10次 / 腿',
-        notes: '硬拉是髋关节铰链动作，必须先充分活动' },
-      { name: '弓步走（徒手）', tag: '髋屈肌 + 股四头激活',
-        info: '原地或走廊行走弓步，步幅大，后膝靠近地面，做20步',
-        sets: 1, reps: '20步',
-        notes: '激活股四头肌和臀大肌' },
-      { name: '徒手罗马尼亚硬拉（动作预热）', tag: '髋铰链动作预热',
-        info: '徒手或极轻哑铃做髋关节铰链动作，臀部向后坐，感受腘绳肌拉伸',
-        sets: 2, reps: '10次',
-        notes: '★ 先建立髋铰链模式，不要用深蹲的模式做硬拉' },
-      { name: '踝关节绕环 + 小腿拉伸', tag: '踝关节灵活性',
-        info: '脚尖踩地，踝关节画圈各10次。再双手撑墙做小腿拉伸20秒',
-        sets: 1, reps: '各10次',
-        notes: '保加利亚分腿蹲对踝关节稳定性要求高' },
-    ],
-    exercises: [
-      { name: '罗马尼亚硬拉', muscle: '股二头 + 臀 主项',
-        weight: '44-60kg ⚠️ 不冲极限',
-        sets: 3, reps: '10-12', rest: '90秒',
-        notes: '⚠️ 不冲极限重量，重硬拉刺激斜方肌。髋关节铰链发力，腰背挺直' },
-      { name: '杠铃深蹲（轻量 · 练动作）', muscle: '股四头 第2次',
-        weight: '比深蹲重日轻20-30%',
-        sets: 3, reps: '10-12', rest: '90秒',
-        notes: '不是力竭组，目的是给股四头第二次刺激同时巩固动作模式，留2-3次余量' },
-      { name: '保加利亚分腿蹲（哑铃）', muscle: '腿 + 臀',
-        weight: '哑铃 10-12kg / 手',
-        sets: 3, reps: '10 / 腿', rest: '60秒',
-        notes: '后腿放凳子上，前腿主导发力。对臀腿比例极好' },
-      { name: '站姿提踵', muscle: '小腿 第2次',
-        weight: '自重 或 杠铃 20-25kg',
-        sets: 3, reps: '15-20', rest: '45秒',
-        notes: '小腿恢复快，适合一周两次刺激' },
-      { name: '悬垂举腿', muscle: '下腹',
-        weight: '自重',
-        sets: 3, reps: '10-15', rest: '60秒',
-        notes: '控制下放，别甩腿借力' },
-      { name: '俄罗斯转体', muscle: '腹斜肌 · 腰细',
-        weight: '哑铃 5kg 或 徒手',
-        sets: 3, reps: '20次（左右各算1）', rest: '45秒',
-        notes: '★ 这个动作让腰细、腹肌线条更立体。身体后倾45°，双脚离地效果更好' },
-    ],
-    stretches: [
-      { name: '坐姿腿后侧拉伸', tag: '拉伸 · 股二头',
-        info: '坐凳子边缘，一腿伸直，从髋部往前折叠身体，双手伸向脚趾方向',
-        sets: 2, reps: '45秒',
-        notes: '★ 从髋关节折叠，不是弯腰驼背' },
-      { name: '臀部拉伸（四字形）', tag: '拉伸 · 臀部',
-        info: '坐凳子，一脚踝放到对侧膝盖上，身体缓慢前倾',
-        sets: 2, reps: '45秒 / 边',
-        notes: '硬拉后必做，臀部紧张会引发腰痛' },
-      { name: '小腿撑墙拉伸', tag: '拉伸 · 小腿',
-        info: '双手撑墙，单腿向后退一大步，后腿膝盖伸直脚跟踩实地面',
-        sets: 2, reps: '30秒 / 边',
-        notes: '提踵后小腿容易抽筋，必须拉开' },
-    ]
-  }
-};
+const DATA=[
+  {sem:'success',title:'球感建立',period:'1–4周',icon:'ti-heart',
+   goal:'让孩子爱上球拍，建立手眼协调与基本球感',
+   weeks:[
+    {l:'第1–2周',t:'认识球拍与球',ss:[
+      {n:'热身',d:10,lk:'success',ls:['慢跑绕场热身1圈','模仿小动物走路（螃蟹步、青蛙跳）','手腕绕圈各方向活动 × 10']},
+      {n:'核心训练',d:40,lk:'info',ls:['握拍：正手握拍（握手式），家长检查虎口是否夹住拍柄','颠球：正手面连续颠球，目标 5→10→20 个不落地','抛接：家长抛球，孩子用球拍接住（不要求打出）','自抛自打：孩子向上抛球，正手轻轻击打']},
+      {n:'趣味游戏',d:20,lk:'warning',ls:['气球羽毛球：用气球替代，飞得慢更容易上手','颠球比赛：看谁连续次数最多，互相挑战']}
+    ]},
+    {l:'第3–4周',t:'基础站姿与步伐',ss:[
+      {n:'热身',d:10,lk:'success',ls:['跳绳 50 下','侧滑步左右各 10 次','踮脚尖走一圈']},
+      {n:'核心训练',d:45,lk:'info',ls:['准备姿势：双脚与肩同宽，微蹲，重心前脚掌，眼睛平视','左右移步：家长喊方向，孩子侧滑步移动（要滑不要跑）','前后移步：前进两步→回中心→后退两步，循环 15 次','影子练习：家长示范，孩子无球模仿动作（步伐+挥拍）']},
+      {n:'趣味游戏',d:20,lk:'warning',ls:['Simon Says（用羽毛球动作当指令）','地板格子：贴胶带画格子，按指令快速踩格']}
+    ]}
+  ]},
+  {sem:'info',title:'基础击球',period:'5–8周',icon:'ti-arrow-right',
+   goal:'掌握正手高远球和基础发球，能完成简单对打',
+   weeks:[
+    {l:'第5–6周',t:'正手高远球',ss:[
+      {n:'热身',d:10,lk:'success',ls:['慢跑 + 手臂前后甩动各 20 次','模拟投球动作热身 20 次','肩关节环绕 × 10']},
+      {n:'核心训练',d:50,lk:'info',ls:['动作引导：像扔石头一样把球扔到远处，借投球感找发力','分解动作：引拍→转体→挥拍→随挥，每个分解单独做 10 次','固定球：家长手持球固定，孩子练习完整击球动作','抛球喂练：家长向上高抛球，孩子正手打高远球 × 30 球','目标练习：设置落点标记（如贴纸），看能否打到']},
+      {n:'趣味游戏',d:20,lk:'warning',ls:['打气球挑战：正手尽力把气球打远','距离挑战：看谁能把球打过最远的标志线']}
+    ]},
+    {l:'第7–8周',t:'发球练习',ss:[
+      {n:'热身',d:10,lk:'success',ls:['模拟发球动作 × 20 次慢速热身','手腕灵活：内外翻转 × 15']},
+      {n:'核心训练',d:45,lk:'info',ls:['正手发高远球：左手持球松开→右手正手击打，动作要慢','发球站位：练习站在正确发球区，左脚在前，重心稳','连续发球：每组 20–30 球，共 3 组，关注动作一致性','简单对打：家长发球，孩子随意回球（重点是接触球）']},
+      {n:'趣味游戏',d:20,lk:'warning',ls:['发球计分：发到后场目标区得 1 分，连发 10 球看总分','亲子对打 5 分赛（家长适当放水，让孩子体验成就感）']}
+    ]}
+  ]},
+  {sem:'warning',title:'技术拓展',period:'9–12周',icon:'ti-chart-bar',
+   goal:'学习反手技术与网前小球，初步建立战术意识',
+   weeks:[
+    {l:'第9–10周',t:'反手基础',ss:[
+      {n:'热身',d:10,lk:'success',ls:['正手高远球热身 10 球（每次必练的基础）','手腕反转练习 × 15 次']},
+      {n:'核心训练',d:50,lk:'info',ls:['反手握拍：从正手快速换反手握拍，反复练习 20 次','反手感知：家长在孩子反手位低点抛球，孩子尝试接触','反手挡球：不要求打远，能稳定接触球就是成功','正反手交替：家长交替喂正手/反手位球，孩子移步接']},
+      {n:'趣味游戏',d:20,lk:'warning',ls:['正反手随机接球（家长喊方向再抛球）','挑战：反手连续颠球 5 下，达成就奖励']}
+    ]},
+    {l:'第11–12周',t:'网前小球',ss:[
+      {n:'热身',d:10,lk:'success',ls:['网前快步冲跑：前后各 10 次','踝关节环绕活动']},
+      {n:'核心训练',d:45,lk:'info',ls:['网前推球：轻柔把球推过网，落点越近越好','网前勾对角：从网前斜向打到对角，感受斜线路线','后场→网前移动：家长打深球，孩子退步再冲网前接','起跳触球引导：网前尝试跳起击球，感受节奏即可']},
+      {n:'趣味游戏',d:20,lk:'warning',ls:['网前专项赛：只能打网前球，先失误者输','亲子配合：家长后场控制，孩子专职网前']}
+    ]}
+  ]},
+  {sem:'danger',title:'实战应用',period:'13–16周',icon:'ti-star',
+   goal:'综合运用所学技术，在真实比赛中体验羽毛球的乐趣',
+   weeks:[
+    {l:'第13–14周',t:'综合技术对打',ss:[
+      {n:'热身',d:10,lk:'success',ls:['正手高远球热身 20 球','步伐综合移动（前后左右）']},
+      {n:'核心训练',d:50,lk:'info',ls:['多球喂练：家长连续喂球（高远→网前→高远），孩子持续移动','薄弱项强化：针对孩子最弱的技术集中加强','战术引导：把球打到对手不容易跑到的地方','完整对打练习：尽量打出 15–20 拍的完整回合']},
+      {n:'趣味游戏',d:20,lk:'warning',ls:['连续对打记录：今天能否打破最高拍数记录？','小比赛：先得 5 分获胜（3 局 2 胜制）']}
+    ]},
+    {l:'第15–16周',t:'趣味正式比赛',ss:[
+      {n:'热身',d:10,lk:'success',ls:['完整热身：步伐+挥拍+拉伸全套','模拟比赛前例行准备']},
+      {n:'核心训练',d:45,lk:'info',ls:['规则学习：发球区域、轮流发球、计分、换边规则','简化版比赛：11 分制，允许 2 次接球降低难度','赛后复盘：和孩子一起回顾哪里打得好，哪里改进']},
+      {n:'趣味游戏',d:25,lk:'warning',ls:['正式亲子比赛（家长让分，让孩子体验赢球的成就感）','颁奖仪式：给孩子阶段性奖励，庆祝完成 16 周！']}
+    ]}
+  ]}
+];
 
-const PRINCIPLES_HTML = `
-  <div class="info-block warn">
-    <h2 class="info-title" style="color:var(--accent)">这次改了<em>什么</em></h2>
-    <p><strong>从"一肌群一周一次"改成"一肌群一周两次"。</strong>原来推/拉/腿/肩四天分化里，每块肌肉一周只被直接刺激一次；现在改成 Upper A → Lower A → 休 → Upper B → Lower B → 休 · 休，同一块肌肉间隔约3-4天再练一次。</p>
-    <p>训练量大体没变（甚至部分肌群略增），只是把同一周的刺激拆成了两次，给恢复留出窗口的同时，缩短"没有生长信号"的空窗期。中束三角（V字感的关键）从一周一次升级成一周两次，是这次调整里改动最大的一项。</p>
-    <p style="color:var(--text-faint);font-size:12px">原来的四天分化已经很完善（动作选择、热身拉伸、避开斜方肌地雷动作的细节都保留了下来），这次只重排了"什么时候练什么"，没有重新发明轮子。</p>
-  </div>
+const TIPS=[
+  {ic:'ti-clock',t:'控制专注时间',d:'6岁孩子专注时间约 15 分钟，每个练习项目不超过 15 分钟，多切换活动保持兴趣'},
+  {ic:'ti-player-play',t:'游戏化训练',d:'把每个练习变成游戏，设置小目标和小奖励，孩子学得更快更开心'},
+  {ic:'ti-heart',t:'多鼓励少纠错',d:'每次最多指出 1–2 个问题，先表扬做对的地方，再温和提出改进'},
+  {ic:'ti-refresh',t:'重复是关键',d:'一个动作需要反复练才能形成肌肉记忆，不要急着进入下一阶段'},
+  {ic:'ti-droplet',t:'及时补充水分',d:'每 20–30 分钟休息一次补水，防止孩子脱水，特别是夏天室外练球'},
+  {ic:'ti-star',t:'以开心为第一',d:'孩子不耐烦或疲劳时立即停止，强行练习会产生负面情绪，损害长期兴趣'}
+];
 
-  <div class="info-block highlight">
-    <h2 class="info-title">怎么<em>排日子</em></h2>
-    <ul>
-      <li><strong>推荐</strong>：Day1 上肢A → Day2 下肢A → 休 → Day3 上肢B → Day4 下肢B → 休 · 休</li>
-      <li>同一肌群两次训练之间留 2-3 天，不要背靠背安排两个上肢日</li>
-      <li><strong>训练窗口</strong>：19:00-21:00，训练后及时补充蛋白质</li>
-    </ul>
-  </div>
+const EQ=[
+  {n:'儿童球拍',s:'21–23 英寸，整体约 70–75g',tip:'铝碳合金，初学不用买太贵'},
+  {n:'羽毛球',s:'室内用羽毛球，耐用选尼龙球',tip:'多备几筒，孩子消耗快'},
+  {n:'运动鞋',s:'羽毛球专用鞋或普通运动鞋',tip:'防侧滑保护踝关节最重要'},
+  {n:'运动服',s:'轻便透气运动套装',tip:'方便大幅度活动即可'}
+];
 
-  <div class="info-block highlight">
-    <h2 class="info-title">起步重量<em>速查表</em></h2>
-    <p style="font-size:12px;color:var(--text-faint);margin-top:0">基于 178cm / 80kg 定制，沿用原计划数值</p>
-    <table class="weight-table">
-      <tr><th>动作</th><th>起步重量</th></tr>
-      <tr><td>哑铃平板卧推</td><td>14-16kg / 手</td></tr>
-      <tr><td>上斜哑铃卧推</td><td>10-12.5kg / 手</td></tr>
-      <tr><td>哑铃肩推</td><td>12-15kg / 手</td></tr>
-      <tr><td>侧平举 ⚠️</td><td>5-6kg / 手（宁轻勿重）</td></tr>
-      <tr><td>反向飞鸟</td><td>5-6kg / 手</td></tr>
-      <tr><td>二头弯举</td><td>10-12kg / 手</td></tr>
-      <tr><td>保加利亚分腿蹲</td><td>10-12kg / 手</td></tr>
-      <tr><td>罗马尼亚硬拉 ⚠️</td><td>44-60kg（不冲极限）</td></tr>
-      <tr><td>杠铃深蹲（重日）</td><td>55-72kg</td></tr>
-      <tr><td>杠铃深蹲（轻日）</td><td>比重日轻20-30%</td></tr>
-    </table>
-  </div>
+const SIC=['ti-player-play','ti-check','ti-star'];
+const SCLR=['#1D9E75','#185FA5','#BA7517'];
+let cp=0,cw=0,to=false;
 
-  <div class="info-block">
-    <h2 class="info-title">重量<em>选择规则</em></h2>
-    <ul>
-      <li>目标 <strong>6-10次</strong> → 选能多做1-2次但不到力竭的重量</li>
-      <li>目标 <strong>10-12次</strong> → 选能做 <strong>14次</strong> 的重量</li>
-      <li>目标 <strong>12-15次</strong> → 选能做 <strong>17-18次</strong> 的重量</li>
-      <li>动作变形 → 立刻退一档重量</li>
-      <li>★ 加重的时机：本周两次同一动作都能在不破坏动作的前提下做满次数上限，下次训练才考虑加量，幅度2.5-5%。不要因为"感觉没效果"就一次性加很多</li>
-    </ul>
-  </div>
+function bg(s){return`var(--color-background-${s})`;}
+function tc(s){return`var(--color-text-${s})`;}
+function bc(s){return`var(--color-border-${s})`;}
 
-  <div class="info-block">
-    <h2 class="info-title">怎么知道<em>有没有在进步</em></h2>
-    <p>镜子和体感在几周内都很不准——大脑对自己身体的变化天然不敏感。比训练日志更可靠的三件事：</p>
-    <ul>
-      <li><strong>训练记录里的数字曲线</strong>：每个动作下面现在会记录历史，同一动作能不能做更多次/更重，比镜子诚实得多</li>
-      <li><strong>同姿势同光线照片</strong>：每2-4周一次，不要每天看</li>
-      <li><strong>围度尺</strong>：肩围、臂围、腰围，数字变化通常比视觉更早出现</li>
-    </ul>
-  </div>
-
-  <div class="info-block">
-    <h2 class="info-title">手臂为什么<em>只做2组</em></h2>
-    <p><strong>手臂靠复合动作"带"出来</strong>——卧推/双杠带三头，引体/划船带二头。现在上肢A、上肢B各只安排2组直接手臂训练（不是不练，是不重复轰炸），因为复合动作本身已经给了手臂足够的间接刺激，叠加每周两次的胸/背训练，总刺激其实是够的。</p>
-    <p><strong>死守斜方肌地雷动作</strong>：绝对不做<strong style="color:#ff6b6b">耸肩、直立划船、极重硬拉、农夫行走、颈后下拉</strong>。</p>
-  </div>
-`;
-
-let state = loadState();
-let currentDay = state.currentDay || 'upperA';
-
-function loadState() {
-  try { const s = localStorage.getItem('slimMuscle80StateV2'); return s ? JSON.parse(s) : { warmup:{}, exercises:{}, stretches:{}, weights:{}, history:{}, currentDay:'upperA' }; }
-  catch(e) { return { warmup:{}, exercises:{}, stretches:{}, weights:{}, history:{}, currentDay:'upperA' }; }
-}
-function saveState() { try { localStorage.setItem('slimMuscle80StateV2', JSON.stringify(state)); } catch(e){} }
-
-function toggleItem(section, dayKey, idx, setIdx) {
-  const key = `${section}_${dayKey}_${idx}_${setIdx}`;
-  if (!state[section]) state[section] = {};
-  state[section][key] = !state[section][key];
-  saveState(); render();
-}
-function isItemDone(section, dayKey, idx, setIdx) {
-  if (!state[section]) return false;
-  return !!state[section][`${section}_${dayKey}_${idx}_${setIdx}`];
-}
-function trendKey(dayKey, section, idx) { return `${dayKey}_${section}_${idx}`; }
-function saveWeight(dayKey, section, idx, value) {
-  state.weights[trendKey(dayKey, section, idx)] = value;
-  saveState();
-}
-function getWeight(dayKey, section, idx) {
-  return state.weights[trendKey(dayKey, section, idx)] || '';
-}
-function todayStr() {
-  const d = new Date();
-  return `${d.getMonth()+1}/${d.getDate()}`;
-}
-function commitHistory(dayKey, section, idx) {
-  const val = getWeight(dayKey, section, idx).trim();
-  if (!val) return;
-  const k = trendKey(dayKey, section, idx);
-  if (!state.history[k]) state.history[k] = {};
-  state.history[k][todayStr() + '_' + Date.now()] = val;
-  // collapse same-day entries: keep only latest per calendar day
-  const today = todayStr();
-  Object.keys(state.history[k]).forEach(dateKey => {
-    if (dateKey.startsWith(today + '_') && dateKey !== (today + '_' + Date.now())) {
-      // will be overwritten naturally below; no-op
-    }
-  });
-  saveState(); render();
-}
-function getHistory(dayKey, section, idx) {
-  const k = trendKey(dayKey, section, idx);
-  const h = state.history[k] || {};
-  return Object.keys(h).map(dateKey => ({
-    date: dateKey.split('_')[0],
-    ts: parseInt(dateKey.split('_')[1] || '0', 10),
-    value: h[dateKey]
-  })).sort((a,b) => a.ts - b.ts);
+function rPT(){
+  document.getElementById('ptabs').innerHTML=DATA.map((p,i)=>
+    `<button onclick="sP(${i})" style="flex:0 0 auto;padding:8px 14px;line-height:1.4;border-radius:var(--border-radius-md);border:0.5px solid ${cp===i?bc(p.sem):'var(--color-border-tertiary)'};background:${cp===i?bg(p.sem):'var(--color-background-primary)'};color:${cp===i?tc(p.sem):'var(--color-text-secondary)'};font-weight:${cp===i?500:400};font-size:13px;cursor:pointer;white-space:nowrap;">
+      <i class="ti ${p.icon}" style="font-size:13px;vertical-align:-1px;margin-right:4px;" aria-hidden="true"></i>${p.title}<br>
+      <span style="font-size:11px;opacity:0.75;">第${p.period}</span>
+    </button>`).join('');
 }
 
-function switchDay(day) { currentDay = day; state.currentDay = day; saveState(); render(); window.scrollTo({top:0,behavior:'smooth'}); }
-
-function resetDay() {
-  if (!confirm('重置本日打卡记录？（历史重量记录不会被清除）')) return;
-  ['warmup','exercises','stretches'].forEach(sec => {
-    if (state[sec]) Object.keys(state[sec]).forEach(k => { if(k.includes(`_${currentDay}_`)) delete state[sec][k]; });
-  });
-  saveState(); render();
-}
-function resetAll() {
-  if (!confirm('清空全部数据，包括历史重量记录？此操作不可恢复')) return;
-  state = { warmup:{}, exercises:{}, stretches:{}, weights:{}, history:{}, currentDay:'upperA' };
-  saveState(); currentDay = 'upperA'; render();
-}
-
-function isDayComplete(dayKey) {
-  if (dayKey === 'info') return false;
-  const day = PLAN[dayKey];
-  const allItems = [
-    ...day.warmup.map((_,i) => ({sec:'warmup',i,sets:1})),
-    ...day.exercises.map((_,i) => ({sec:'exercises',i,sets:_.sets})),
-    ...day.stretches.map((_,i) => ({sec:'stretches',i,sets:_.sets})),
-  ];
-  for (const item of allItems) {
-    for (let s = 0; s < item.sets; s++) {
-      if (!isItemDone(item.sec, dayKey, item.i, s)) return false;
-    }
-  }
-  return true;
-}
-
-function getDayProgress(dayKey) {
-  const day = PLAN[dayKey];
-  let total = 0, done = 0;
-  const count = (arr, sec) => arr.forEach((ex,i) => {
-    const sets = ex.sets || 1;
-    for (let s = 0; s < sets; s++) { total++; if (isItemDone(sec, dayKey, i, s)) done++; }
-  });
-  count(day.warmup, 'warmup');
-  count(day.exercises, 'exercises');
-  count(day.stretches, 'stretches');
-  return { done, total, pct: total ? (done/total*100) : 0 };
-}
-
-function buildTrendRow(dayKey, section, idx) {
-  const hist = getHistory(dayKey, section, idx).slice(-3);
-  if (!hist.length) return `<div class="trend-row"><span class="trend-label">趋势</span><span class="trend-empty">还没有记录，存几次之后这里会显示变化</span></div>`;
-  const chips = hist.map((h,i) => `<span class="trend-chip ${i===hist.length-1?'latest':''}">${h.date}: ${h.value}</span>`).join('');
-  return `<div class="trend-row"><span class="trend-label">趋势</span>${chips}</div>`;
-}
-
-function buildWarmupCard(ex, dayKey, idx) {
-  const done = isItemDone('warmup', dayKey, idx, 0);
-  const val = getWeight(dayKey, 'warmup', idx);
-  return `
-    <div class="exercise warmup-card ${done?'done':''}">
-      <div class="exercise-num">WARM-UP ${String(idx+1).padStart(2,'0')}</div>
-      <h3 class="exercise-name">${ex.name}</h3>
-      <span class="exercise-muscle warm">${ex.tag}</span>
-      <div class="specs">
-        <div class="spec"><div class="spec-label">数量</div><div class="spec-value">${ex.reps}</div></div>
-        <div class="spec"><div class="spec-label">完成标记</div><div class="spec-value">—</div></div>
+function rPG(){
+  const p=DATA[cp];
+  document.getElementById('pgoal').innerHTML=
+    `<div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;display:flex;align-items:flex-start;gap:10px;">
+      <div style="width:36px;height:36px;border-radius:50%;background:${bg(p.sem)};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <i class="ti ${p.icon}" style="font-size:17px;color:${tc(p.sem)};" aria-hidden="true"></i>
       </div>
-      <div class="info-row warm">
-        <div class="info-row-label">做法</div>
-        <div class="info-row-value" style="font-weight:400;color:var(--text-dim);font-family:var(--sans);font-size:12px;line-height:1.6">${ex.info}</div>
-        <div class="actual-row">
-          <span class="actual-label">备注：</span>
-          <input class="actual-input" type="text" placeholder="记录（可选）" value="${val}" oninput="saveWeight('${dayKey}','warmup',${idx},this.value)">
-        </div>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);">${p.title} · 第${p.period}</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-top:3px;">目标：${p.goal}</div>
       </div>
-      <div class="sets">
-        <button class="set-btn ${done?'done':''}" onclick="toggleItem('warmup','${dayKey}',${idx},0)">✓</button>
-      </div>
-      <div class="notes">${ex.notes}</div>
     </div>`;
 }
 
-function buildExerciseCard(ex, dayKey, idx) {
-  let allDone = true;
-  const btns = [];
-  for (let s = 0; s < ex.sets; s++) {
-    const done = isItemDone('exercises', dayKey, idx, s);
-    if (!done) allDone = false;
-    btns.push(`<button class="set-btn ${done?'done':''}" onclick="toggleItem('exercises','${dayKey}',${idx},${s})">${s+1}</button>`);
-  }
-  const val = getWeight(dayKey, 'exercises', idx);
-  return `
-    <div class="exercise ${allDone?'done':''}">
-      <div class="exercise-num">EXERCISE ${String(idx+1).padStart(2,'0')}</div>
-      <h3 class="exercise-name">${ex.name}</h3>
-      <span class="exercise-muscle main">${ex.muscle}</span>
-      <div class="specs">
-        <div class="spec"><div class="spec-label">组数 × 次数</div><div class="spec-value">${ex.sets} × ${ex.reps}</div></div>
-        <div class="spec"><div class="spec-label">组间休息</div><div class="spec-value">${ex.rest}</div></div>
-      </div>
-      <div class="info-row main">
-        <div class="info-row-label">推荐重量（80kg版）</div>
-        <div class="info-row-value">${ex.weight}</div>
-        <div class="actual-row">
-          <span class="actual-label">今天用：</span>
-          <input class="actual-input" type="text" placeholder="如：15kg × 10次" value="${val}" oninput="saveWeight('${dayKey}','exercises',${idx},this.value)">
-          <button class="save-btn" onclick="commitHistory('${dayKey}','exercises',${idx})">存入记录</button>
-        </div>
-        ${buildTrendRow(dayKey, 'exercises', idx)}
-      </div>
-      <div class="sets">${btns.join('')}</div>
-      <div class="notes">${ex.notes}</div>
-    </div>`;
+function rWT(){
+  const p=DATA[cp];
+  document.getElementById('wtabs').innerHTML=p.weeks.map((w,i)=>
+    `<button onclick="sW(${i})" style="flex:1;padding:9px 8px;line-height:1.4;border-radius:var(--border-radius-md);border:0.5px solid ${cw===i?bc(p.sem):'var(--color-border-tertiary)'};background:${cw===i?bg(p.sem):'var(--color-background-primary)'};color:${cw===i?tc(p.sem):'var(--color-text-secondary)'};font-size:13px;font-weight:${cw===i?500:400};cursor:pointer;">
+      ${w.l}<br><span style="font-size:11px;opacity:0.8;">${w.t}</span>
+    </button>`).join('');
 }
 
-function buildStretchCard(ex, dayKey, idx) {
-  let allDone = true;
-  const btns = [];
-  for (let s = 0; s < ex.sets; s++) {
-    const done = isItemDone('stretches', dayKey, idx, s);
-    if (!done) allDone = false;
-    btns.push(`<button class="set-btn ${done?'done':''}" onclick="toggleItem('stretches','${dayKey}',${idx},${s})">${s+1}</button>`);
-  }
-  const val = getWeight(dayKey, 'stretches', idx);
-  return `
-    <div class="exercise stretch-card ${allDone?'done':''}">
-      <div class="exercise-num">STRETCH ${String(idx+1).padStart(2,'0')}</div>
-      <h3 class="exercise-name">${ex.name}</h3>
-      <span class="exercise-muscle cool">${ex.tag}</span>
-      <div class="specs">
-        <div class="spec"><div class="spec-label">次数 × 时长</div><div class="spec-value">${ex.sets} × ${ex.reps}</div></div>
-        <div class="spec"><div class="spec-label">说明</div><div class="spec-value">—</div></div>
-      </div>
-      <div class="info-row cool">
-        <div class="info-row-label">拉伸方法</div>
-        <div class="info-row-value" style="font-weight:400;color:var(--text-dim);font-family:var(--sans);font-size:12px;line-height:1.6">${ex.info}</div>
-        <div class="actual-row">
-          <span class="actual-label">感受：</span>
-          <input class="actual-input" type="text" placeholder="记录拉伸感受（可选）" value="${val}" oninput="saveWeight('${dayKey}','stretches',${idx},this.value)">
-        </div>
-      </div>
-      <div class="sets">${btns.join('')}</div>
-      <div class="notes">${ex.notes}</div>
-    </div>`;
-}
-
-function render() {
-  const d = new Date();
-  document.getElementById('date').textContent = `${d.getMonth()+1}月${d.getDate()}日 · ${['日','一','二','三','四','五','六'][d.getDay()]}`;
-
-  const days = [
-    {key:'upperA',label:'上肢A',num:'Day 1'},
-    {key:'lowerA',label:'下肢A',num:'Day 2'},
-    {key:'upperB',label:'上肢B',num:'Day 3'},
-    {key:'lowerB',label:'下肢B',num:'Day 4'},
-    {key:'info',label:'原则',num:'Info'},
-  ];
-  document.getElementById('dayTabs').innerHTML = days.map(d => {
-    const complete = d.key !== 'info' && isDayComplete(d.key) ? 'completed' : '';
-    const active = currentDay === d.key ? 'active' : '';
-    return `<div class="day-tab ${active} ${complete}" onclick="switchDay('${d.key}')"><span class="day-num">${d.num}</span>${d.label}</div>`;
-  }).join('');
-
-  const main = document.getElementById('main');
-  if (currentDay === 'info') {
-    main.innerHTML = `<div class="day-header"><div class="day-meta">PRINCIPLES / WEIGHTS / TIPS</div><h2 class="day-title">原则与<em>参考</em></h2></div>${PRINCIPLES_HTML}`;
-    return;
-  }
-
-  const day = PLAN[currentDay];
-  const prog = getDayProgress(currentDay);
-
-  const warmupHTML = day.warmup.map((ex,i) => buildWarmupCard(ex, currentDay, i)).join('');
-  const exerciseHTML = day.exercises.map((ex,i) => buildExerciseCard(ex, currentDay, i)).join('');
-  const stretchHTML = day.stretches.map((ex,i) => buildStretchCard(ex, currentDay, i)).join('');
-
-  main.innerHTML = `
-    <div class="day-header">
-      <div class="day-meta">${currentDay.toUpperCase()} / ${day.focus}</div>
-      <h2 class="day-title">${day.title}</h2>
-      <p class="day-sub">${day.sub}</p>
-      <div class="progress-row">
-        <div class="progress-bar"><div class="progress-fill" style="width:${prog.pct}%"></div></div>
-        <span>${prog.done}/${prog.total}</span>
-      </div>
+function rS(){
+  const w=DATA[cp].weeks[cw];
+  const tot=w.ss.reduce((s,x)=>s+x.d,0);
+  document.getElementById('sessions').innerHTML=
+    `<div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 12px;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+      <i class="ti ti-edit" style="font-size:14px;color:var(--color-text-secondary);" aria-hidden="true"></i>
+      <span style="font-size:13px;font-weight:500;color:var(--color-text-primary);">本周主题：${w.t}</span>
+      <span style="margin-left:auto;font-size:12px;color:var(--color-text-secondary);">每日约 ${tot} 分钟</span>
     </div>
-    <div class="section-divider warmup">训练前热身 · Warm Up</div>
-    ${warmupHTML}
-    <div class="section-divider main-workout">正式训练 · Main Workout</div>
-    ${exerciseHTML}
-    <div class="section-divider stretch">训练后拉伸 · Cool Down</div>
-    ${stretchHTML}
-  `;
+    ${w.ss.map((s,si)=>`
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <i class="ti ${SIC[si]}" style="font-size:16px;color:${SCLR[si]};" aria-hidden="true"></i>
+        <span style="font-size:14px;font-weight:500;color:var(--color-text-primary);">${s.n}</span>
+        <span style="margin-left:auto;background:${bg(s.lk)};color:${tc(s.lk)};font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);">
+          <i class="ti ti-clock" style="font-size:11px;vertical-align:-1px;" aria-hidden="true"></i> ${s.d} 分钟
+        </span>
+      </div>
+      ${s.ls.map((l,li)=>`<div style="font-size:13px;color:var(--color-text-primary);padding:5px 0 5px 14px;position:relative;${li<s.ls.length-1?'border-bottom:0.5px solid var(--color-border-tertiary);':''}"><span style="position:absolute;left:2px;color:var(--color-text-tertiary);">›</span>${l}</div>`).join('')}
+    </div>`).join('')}`;
 }
 
+function rTB(){
+  const w=DATA[cp].weeks[cw];
+  const tot=w.ss.reduce((s,x)=>s+x.d,0);
+  document.getElementById('timebar').innerHTML=
+    `<div style="display:flex;height:4px;border-radius:2px;overflow:hidden;">
+      ${w.ss.map((s,i)=>`<div style="flex:${s.d};background:${SCLR[i]};"></div>`).join('')}
+    </div>
+    <div style="display:flex;gap:16px;margin-top:6px;">
+      ${w.ss.map((s,i)=>`<span style="font-size:11px;color:var(--color-text-secondary);display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;border-radius:50%;background:${SCLR[i]};display:inline-block;"></span>${s.n} ${Math.round(s.d/tot*100)}%</span>`).join('')}
+    </div>`;
+}
+
+function rTips(){
+  document.getElementById('tpanel').innerHTML=
+    `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;">
+      ${TIPS.map(t=>`
+      <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem;">
+        <i class="ti ${t.ic}" style="font-size:20px;color:var(--color-text-warning);display:block;margin-bottom:6px;" aria-hidden="true"></i>
+        <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;">${t.t}</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6;">${t.d}</div>
+      </div>`).join('')}
+    </div>`;
+}
+
+function rEQ(){
+  document.getElementById('eq').innerHTML=EQ.map((e,i)=>
+    `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;${i<EQ.length-1?'border-bottom:0.5px solid var(--color-border-tertiary);':''}">
+      <div style="width:28px;height:28px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--color-text-secondary);flex-shrink:0;">${i+1}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);">${e.n}</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);">${e.s}</div>
+      </div>
+      <div style="font-size:11px;color:var(--color-text-success);background:var(--color-background-success);padding:3px 8px;border-radius:var(--border-radius-md);white-space:nowrap;flex-shrink:0;">${e.tip}</div>
+    </div>`).join('');
+}
+
+function sP(i){cp=i;cw=0;render();}
+function sW(i){cw=i;render();}
+function tt(){
+  to=!to;
+  document.getElementById('ta').style.transform=to?'rotate(180deg)':'';
+  const p=document.getElementById('tpanel');
+  p.style.display=to?'block':'none';
+  if(to&&!p.innerHTML.trim())rTips();
+}
+function render(){rPT();rPG();rWT();rS();rTB();}
 render();
+rEQ();
 </script>
-</body>
-</html>
