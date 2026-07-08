@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#fdf8f3">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>居家轻盈计划</title>
+<title>体态雕塑计划</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600&family=Zhi+Mang+Xing&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -18,6 +18,7 @@
     --sage:#9caf88;--sage-soft:#e8efe1;
     --rose:#d98a8a;--rose-soft:#f7e0e0;
     --sky:#8fb4c9;--sky-soft:#e3eef3;
+    --lilac:#b39ddb;--lilac-soft:#ece3f7;
     --serif:'Noto Serif SC',serif;
     --hand:'Zhi Mang Xing',cursive;
     --sans:'Nunito',-apple-system,sans-serif;
@@ -31,7 +32,7 @@
   .subtitle{font-family:var(--sans);font-size:12px;color:var(--text-dim);margin-top:4px;line-height:1.5;}
   .day-tabs{display:flex;gap:6px;margin-top:14px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
   .day-tabs::-webkit-scrollbar{display:none;}
-  .day-tab{flex:1;min-width:0;padding:10px 6px;background:var(--bg-card);border:1.5px solid var(--border);border-radius:14px;color:var(--text-dim);font-family:var(--sans);font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;text-align:center;}
+  .day-tab{flex:0 0 auto;min-width:56px;padding:10px 8px;background:var(--bg-card);border:1.5px solid var(--border);border-radius:14px;color:var(--text-dim);font-family:var(--sans);font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;text-align:center;}
   .day-tab .day-emoji{display:block;font-size:18px;margin-bottom:3px;}
   .day-tab.active{background:var(--peach);border-color:var(--peach);color:#fff;}
   .day-tab.completed::after{content:' 完成';color:var(--sage);font-size:9px;}
@@ -40,6 +41,8 @@
   .day-banner-label{font-family:var(--sans);font-size:11px;color:var(--peach);font-weight:700;letter-spacing:0.05em;margin-bottom:4px;}
   .day-banner-title{font-family:var(--serif);font-size:24px;font-weight:600;margin:0 0 8px;}
   .day-banner-desc{font-size:13px;color:var(--text-dim);line-height:1.6;}
+  .day-banner-focus{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+  .focus-chip{font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:20px;background:#fff;color:var(--peach);border:1px solid var(--peach-soft);}
   .progress-row{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:11px;color:var(--text-dim);font-weight:600;}
   .progress-bar{flex:1;height:6px;background:#fff;border-radius:3px;overflow:hidden;}
   .progress-fill{height:100%;width:0%;background:var(--peach);transition:width 0.3s ease-out;border-radius:3px;}
@@ -66,6 +69,7 @@
   .exercise-muscle.main{color:#b5723e;background:var(--peach-soft);}
   .exercise-muscle.cardio{color:#6b8054;background:var(--sage-soft);}
   .exercise-muscle.cool{color:#b06868;background:var(--rose-soft);}
+  .exercise-muscle.key{color:#7a5da3;background:var(--lilac-soft);}
   .specs{display:flex;gap:8px;margin:12px 0;}
   .spec{flex:1;background:var(--bg-soft);padding:9px 10px;border-radius:11px;text-align:center;}
   .spec-label{font-size:9.5px;color:var(--text-faint);font-weight:700;letter-spacing:0.03em;margin-bottom:3px;}
@@ -79,6 +83,7 @@
   .gentle-note{font-size:12px;line-height:1.6;color:var(--text-faint);margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-style:italic;}
   .info-block{background:var(--bg-card);border:1.5px solid var(--border-soft);border-radius:18px;padding:20px;margin-bottom:14px;}
   .info-block.peach{border-color:var(--peach-soft);background:linear-gradient(180deg,#fff9f4 0%,var(--bg-card) 100%);}
+  .info-block.lilac{border-color:var(--lilac-soft);background:linear-gradient(180deg,#faf7fd 0%,var(--bg-card) 100%);}
   .info-title{font-family:var(--serif);font-size:18px;font-weight:600;margin:0 0 10px;}
   .info-block p{font-size:13px;line-height:1.7;color:var(--text-dim);margin:6px 0;}
   .info-block p b{color:var(--text);}
@@ -88,13 +93,13 @@
   .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:12px 0;}
   .week-day{text-align:center;padding:9px 2px;border-radius:11px;}
   .week-day .wd-label{font-size:9px;color:var(--text-faint);margin-bottom:4px;font-weight:700;}
-  .week-day .wd-content{font-size:10.5px;line-height:1.3;font-weight:700;}
+  .week-day .wd-content{font-size:9.5px;line-height:1.3;font-weight:700;}
   .week-day.train{background:var(--peach-soft);}
   .week-day.train .wd-content{color:#b5723e;}
   .week-day.cardio{background:var(--sage-soft);}
   .week-day.cardio .wd-content{color:#6b8054;}
-  .week-day.rest{background:var(--bg-soft);}
-  .week-day.rest .wd-content{color:var(--text-faint);}
+  .week-day.rest{background:var(--lilac-soft);}
+  .week-day.rest .wd-content{color:#7a5da3;}
   .footer{padding:20px 20px 32px;display:flex;gap:10px;border-top:1px solid var(--border-soft);margin-top:20px;max-width:560px;margin-left:auto;margin-right:auto;}
   .btn{flex:1;padding:13px;background:var(--bg-card);border:1.5px solid var(--border);border-radius:14px;color:var(--text-dim);font-size:12px;font-weight:700;cursor:pointer;}
   .encourage{text-align:center;padding:18px;font-family:var(--hand);font-size:18px;color:var(--peach);}
@@ -102,9 +107,9 @@
 </head>
 <body>
 <header class="header">
-  <div class="greeting">给老婆的小计划 ⛅</div>
-  <h1 class="title">居家轻盈计划</h1>
-  <div class="subtitle">徒手 + 一对2.5kg哑铃 + 弹力带 · 零基础友好 · 一周3天</div>
+  <div class="greeting">给老婆的体态雕塑计划 ⛅</div>
+  <h1 class="title">直角肩 · 细腰 · 紧致计划</h1>
+  <div class="subtitle">徒手 + 一对2.5kg哑铃 + 弹力带 · 一周6练 + 1天主动恢复 · 每天约1小时</div>
   <div class="day-tabs" id="dayTabs"></div>
 </header>
 <main class="main" id="main"></main>
@@ -116,69 +121,155 @@
 <script>
 const PLAN = {
   day1: {
-    emoji:'🌸', title:'全身唤醒日', desc:'第一次练，重点是把动作做对，不追求多累。慢慢来，身体会记住的。',
+    emoji:'🌸', title:'背部 · 体态矫正日 ①', desc:'今天专门解决"脖子到肩膀像斜坡"的问题——练下斜方肌和肩胛骨中缝，同时放松紧绷的上斜方肌。这是练出直角肩最关键的一天。',
+    focus:['直角肩','改善驼背'],
     warmup: [
       { name:'原地踏步 + 摆臂', tag:'热身', info:'像散步一样原地踏步，手臂自然前后摆动，把身体唤醒', sets:1, reps:'2分钟', notes:'不用快，舒服的节奏就好' },
-      { name:'肩颈绕环', tag:'热身', info:'双肩向后绕大圈10次，再向前绕10次。头部缓慢左右转动各5次', sets:1, reps:'各10次', notes:'久坐之后这个特别舒服' },
+      { name:'猫牛式', tag:'热身', info:'四点跪地，吸气塌腰抬头（牛式），呼气拱背含胸（猫式），缓慢交替', sets:1, reps:'8次', notes:'唤醒整条脊柱，驼背体质做这个特别好' },
       { name:'弹力带肩部唤醒', tag:'热身', info:'双手抓弹力带两端，与肩同宽，缓慢向两侧拉开再收回', sets:1, reps:'10次', notes:'轻轻拉，感受肩膀打开' },
     ],
     exercises: [
-      { name:'靠墙深蹲', muscle:'腿臀', info:'背靠墙，慢慢下滑到大腿与地面约45度（不用蹲很低），停留，再起来', sets:3, reps:'10次', rest:'60秒', notes:'★ 第一次做，蹲浅一点没关系，膝盖不要内扣' },
-      { name:'弹力带臀桥', muscle:'臀部', info:'仰卧屈膝，弹力带套在膝盖上方，臀部向上抬起，膝盖顶住弹力带不让它向内收', sets:3, reps:'12次', rest:'60秒', notes:'抬到顶峰停1秒，感受臀部夹紧' },
-      { name:'跪姿俯卧撑', muscle:'胸 手臂', info:'双膝跪地，手比肩略宽，身体一条直线，慢慢下降再推起', sets:3, reps:'8次（做不到就更少，没关系）', rest:'60秒', notes:'★ 零基础从跪姿开始完全正确，不用勉强标准俯卧撑' },
-      { name:'哑铃站姿前平举', muscle:'肩部线条', info:'双手各拿一个2.5kg哑铃，手臂伸直向前抬起到肩膀高度，再放下', sets:3, reps:'10次', rest:'45秒', notes:'手臂微屈，不要锁死肘关节' },
-      { name:'卷腹', muscle:'腹部', info:'仰卧屈膝，双手交叉放胸前，肩膀离地卷起，再慢慢放下', sets:3, reps:'12次', rest:'45秒', notes:'不用坐起来，肩胛骨离地就够了' },
+      { name:'弹力带面拉 Face Pull', muscle:'下斜方肌·肩后束', key:true, info:'弹力带固定在与肩同高处（或双手拉紧），手肘抬起与肩同高，向后拉向脸的方向，重点是拉的过程中两边肩胛骨向中间收紧', sets:4, reps:'15次', rest:'45秒', notes:'★★★ 全天最重要的动作，专门矫正圆肩高耸的斜方肌，慢慢做，感受肩胛骨中间夹紧的感觉' },
+      { name:'俯身弹力带划船', muscle:'背阔肌·中背', info:'弹力带踩在脚下，身体前倾45度，背部挺直，双手向后拉到腰侧，感受肩胛骨收紧', sets:3, reps:'12次', rest:'60秒', notes:'背一定要挺直，不要弓背去拉，重量不重要，姿势正确才有效' },
+      { name:'YTW字母操', muscle:'下斜方肌·菱形肌', key:true, info:'俯卧或前倾站姿，手臂依次摆成Y字、T字、W字形，每个字母抬起手臂停留2秒。可以徒手做或拿1kg以内的轻物', sets:3, reps:'各6次', rest:'45秒', notes:'★ 专门激活容易被上斜方肌"抢戏"的下斜方肌，动作要慢，别用惯性甩' },
+      { name:'靠墙天使 Wall Angels', muscle:'肩胛稳定', info:'背贴墙站立，手肘手背贴墙，像做雪天使一样缓慢向上滑动再放下，全程贴墙', sets:3, reps:'12次', rest:'30秒', notes:'一开始贴不紧墙很正常，坚持练会越来越贴合，这个动作直接改善圆肩' },
+      { name:'卷腹', muscle:'腹部', info:'仰卧屈膝，双手交叉放胸前，肩膀离地卷起，再慢慢放下', sets:3, reps:'15次', rest:'40秒', notes:'不用坐起来，肩胛骨离地就够了' },
     ],
     cardio: [],
     stretches: [
-      { name:'坐姿前屈拉伸', tag:'拉伸', info:'坐地上双腿伸直，身体慢慢向前折叠，手够向脚的方向', sets:1, reps:'30秒', notes:'不用够到脚，能拉伸到就好' },
+      { name:'上斜方肌拉伸', tag:'拉伸', key:true, info:'坐姿，一只手轻压头部向对侧倾斜，感受脖子到肩膀那条"斜坡"被拉开', sets:1, reps:'30秒/侧', notes:'★ 抱孩子后每天做，专门放松高耸的斜方肌' },
+      { name:'门框胸部拉伸', tag:'拉伸', info:'手臂搭在门框上，身体缓慢向前倾，拉伸胸部前侧', sets:1, reps:'30秒/侧', notes:'胸肌紧会把肩膀往前拽，这个动作帮肩膀归位' },
       { name:'婴儿式', tag:'拉伸', info:'跪坐，身体前倒，手臂向前伸展，额头贴地或悬空都可以', sets:1, reps:'45秒', notes:'放松呼吸，这是最舒服的一个动作' },
-      { name:'深呼吸放松', tag:'放松', info:'躺下，双手放腹部，缓慢深呼吸5次，感受身体放松下来', sets:1, reps:'5次呼吸', notes:'给自己一点安静的时间' },
     ]
   },
   day2: {
-    emoji:'🌿', title:'有氧 + 核心日', desc:'今天主要是有氧爬坡，加一点核心训练。爬坡部分按你自己的节奏，能坚持多久算多久。',
+    emoji:'🍑', title:'臀腿塑形 + HIIT', desc:'今天练腿臀线条，加一段燃脂有氧。腿细、臀翘，走路姿态也会更好看。',
+    focus:['塑形','燃脂'],
     warmup: [
-      { name:'原地踏步 + 摆臂', tag:'热身', info:'原地踏步2分钟，慢慢把心率带起来', sets:1, reps:'2分钟', notes:'为接下来的爬坡做准备' },
-      { name:'踝关节绕环', tag:'热身', info:'脚尖点地，脚踝顺逆时针各绕10圈，换脚', sets:1, reps:'各10圈/脚', notes:'爬坡前活动脚踝很重要' },
+      { name:'原地踏步 + 摆臂', tag:'热身', info:'原地踏步2分钟，慢慢把心率带起来', sets:1, reps:'2分钟', notes:'为接下来的训练做准备' },
+      { name:'髋关节绕环', tag:'热身', info:'双手叉腰，髋部缓慢画圈，顺逆时针各8次', sets:1, reps:'各8次', notes:'深蹲和弓步前先打开髋关节' },
       { name:'动态腿部摆动', tag:'热身', info:'扶墙，单腿前后摆动10次，再左右摆动10次，换腿', sets:1, reps:'各10次/腿', notes:'唤醒腿部肌肉' },
     ],
     exercises: [
-      { name:'弹力带坐姿划船', muscle:'背部', info:'坐地上双腿伸直，弹力带绕过脚掌，双手抓两端向后拉，感受肩胛骨收紧', sets:3, reps:'12次', rest:'60秒', notes:'背挺直，不要弓背' },
-      { name:'哑铃侧平举', muscle:'肩部线条', info:'双手各拿2.5kg哑铃，手臂微屈，向两侧抬起到肩膀高度', sets:3, reps:'10次', rest:'45秒', notes:'★ 这是练出肩膀好看线条最关键的动作，慢慢做' },
-      { name:'平板支撑（跪姿可选）', muscle:'核心', info:'前臂撑地，身体一条直线。如果太难可以用跪姿平板支撑', sets:3, reps:'20-30秒', rest:'45秒', notes:'坚持不住就跪姿，质量比时长重要' },
-      { name:'侧卧抬腿', muscle:'臀腿外侧', info:'侧卧，下方腿微屈，上方腿伸直缓慢上下抬起', sets:3, reps:'12次/侧', rest:'45秒', notes:'腿细线条来源，慢慢做更有效' },
+      { name:'靠墙深蹲', muscle:'腿臀', info:'背靠墙，慢慢下滑到大腿与地面约45度，停留，再起来', sets:3, reps:'12次', rest:'60秒', notes:'膝盖不要内扣，感受大腿前侧发力' },
+      { name:'弹力带臀桥', muscle:'臀部', info:'仰卧屈膝，弹力带套在膝盖上方，臀部向上抬起，膝盖顶住弹力带不让它向内收', sets:3, reps:'15次', rest:'50秒', notes:'抬到顶峰停1-2秒，感受臀部夹紧，这是翘臀的关键动作' },
+      { name:'哑铃保加利亚分腿蹲', muscle:'腿臀', info:'后脚背搭在椅子上，前腿屈膝下蹲，双手各拿一个哑铃增加强度', sets:3, reps:'10次/腿', rest:'60秒', notes:'如果平衡不好可以先不拿哑铃，扶墙练' },
+      { name:'弹力带蚌式开合', muscle:'臀中肌', info:'侧卧屈膝，弹力带套膝盖上方，像蚌壳一样打开上方膝盖再合拢', sets:3, reps:'15次/侧', rest:'40秒', notes:'臀部外侧线条来源，也帮助髋部稳定' },
     ],
     cardio: [
-      { name:'爬坡有氧', tag:'有氧主项', info:'按你平时的方式爬坡，强度保持在微微喘但还能说话的程度', sets:1, reps:'20-30分钟', notes:'★ 今天的重点。强度不用太大，时间够了就好，能坚持下来比强度更重要' },
-    ],
-    stretches: [
-      { name:'坐姿前屈拉伸', tag:'拉伸', info:'坐地上双腿伸直，身体慢慢向前折叠', sets:1, reps:'30秒', notes:'拉伸腿后侧' },
-      { name:'小腿拉伸', tag:'拉伸', info:'面对墙，一脚在前一脚在后，后腿伸直脚跟踩实地面', sets:1, reps:'30秒/腿', notes:'爬坡后小腿容易紧，拉一拉很舒服' },
-      { name:'婴儿式', tag:'拉伸', info:'跪坐，身体前倒，手臂向前伸展放松', sets:1, reps:'45秒', notes:'结束前的放松' },
-    ]
-  },
-  day3: {
-    emoji:'🍑', title:'塑形巩固日', desc:'这是一周最后一练，把前两天的动作再巩固一下，重点放在臀腿和核心。',
-    warmup: [
-      { name:'原地踏步 + 摆臂', tag:'热身', info:'原地踏步2分钟', sets:1, reps:'2分钟', notes:'同样的开场，让身体熟悉节奏' },
-      { name:'髋关节绕环', tag:'热身', info:'双手叉腰，髋部缓慢画圈，顺逆时针各8次', sets:1, reps:'各8次', notes:'深蹲和臀桥前先打开髋关节' },
-      { name:'弹力带腿部激活', tag:'热身', info:'弹力带套在脚踝上方，侧向小步走10步，再走回来', sets:1, reps:'来回各10步', notes:'提前激活臀部，深蹲会更有感觉' },
-    ],
-    exercises: [
-      { name:'靠墙深蹲', muscle:'腿臀', info:'背靠墙，慢慢下滑停留，再起来。这周第三次做，可以比第一天蹲深一点点', sets:3, reps:'12次', rest:'60秒', notes:'感受一下是不是比第一天更轻松了' },
-      { name:'弹力带臀桥', muscle:'臀部', info:'仰卧屈膝，弹力带套膝盖上方，臀部抬起撑住', sets:3, reps:'15次', rest:'60秒', notes:'这周最后一组，可以稍微加几次' },
-      { name:'跪姿俯卧撑', muscle:'胸 手臂', info:'双膝跪地，慢慢下降再推起', sets:3, reps:'10次', rest:'60秒', notes:'比第一天多做2次试试看' },
-      { name:'哑铃弯举', muscle:'手臂线条', info:'双手各拿2.5kg哑铃，手臂自然下垂，弯曲手肘抬起再放下', sets:3, reps:'12次', rest:'45秒', notes:'手臂紧致线条来源' },
-      { name:'俄罗斯转体', muscle:'腰腹', info:'坐地上，膝盖微屈，身体后倾，双手交叉在胸前左右转动', sets:3, reps:'16次（左右各算1次）', rest:'45秒', notes:'腰部线条很关键的一个动作' },
-    ],
-    cardio: [
-      { name:'轻松爬坡（可选）', tag:'有氧 · 选做', info:'如果今天还有精力，可以加10-15分钟轻松爬坡，强度比周二低一些', sets:1, reps:'10-15分钟（量力而行）', notes:'今天力量动作已经不少，有氧不强求' },
+      { name:'HIIT燃脂组合', tag:'有氧主项', key:true, info:'开合跳30秒 + 高抬腿30秒 + 休息30秒，循环6-8组，或按你平时的爬坡方式保持中高强度20分钟', sets:1, reps:'18-20分钟', notes:'★ 强度比匀速有氧更高效燃脂，喘但还能说短句的程度就够了' },
     ],
     stretches: [
       { name:'蝴蝶式拉伸', tag:'拉伸', info:'坐地上，脚掌相对，膝盖向两侧打开，身体缓慢前倾', sets:1, reps:'30秒', notes:'拉伸大腿内侧' },
       { name:'臀部拉伸', tag:'拉伸', info:'仰卧，一脚踝放另一腿膝盖上，双手抱住下方大腿向胸口拉', sets:1, reps:'30秒/边', notes:'深蹲臀桥后做这个特别舒服' },
+      { name:'小腿拉伸', tag:'拉伸', info:'面对墙，一脚在前一脚在后，后腿伸直脚跟踩实地面', sets:1, reps:'30秒/腿', notes:'避免小腿练粗' },
+    ]
+  },
+  day3: {
+    emoji:'🌷', title:'胸型 · 直角肩塑造日', desc:'今天是胸部线条 + 直角肩的重点日：三角肌中束负责肩膀的"宽度和平角感"，胸部训练让上围更挺，两者一起练曲线会明显好看。',
+    focus:['直角肩','胸型'],
+    warmup: [
+      { name:'肩颈绕环', tag:'热身', info:'双肩向后绕大圈10次，再向前绕10次。头部缓慢左右转动各5次', sets:1, reps:'各10次', notes:'久坐或抱娃之后这个特别舒服' },
+      { name:'手臂环绕', tag:'热身', info:'手臂伸直，前后各绕圈10次，由小圈到大圈', sets:1, reps:'各10次', notes:'活动肩关节' },
+      { name:'弹力带肩部唤醒', tag:'热身', info:'双手抓弹力带两端，与肩同宽，缓慢向两侧拉开再收回', sets:1, reps:'10次', notes:'轻轻拉，感受肩膀打开' },
+    ],
+    exercises: [
+      { name:'哑铃地板飞鸟', muscle:'胸部', info:'仰卧地上，双膝屈起，双手各拿哑铃向两侧打开再收回胸前上方，像抱一个大气球', sets:3, reps:'12次', rest:'50秒', notes:'胸型塑造的核心动作，收回时感受胸肌中间挤压' },
+      { name:'跪姿俯卧撑', muscle:'胸·手臂', info:'双膝跪地，手比肩略宽，身体一条直线，慢慢下降再推起', sets:3, reps:'12次', rest:'60秒', notes:'比原来的8次多了，试试看能不能做到' },
+      { name:'哑铃侧平举', muscle:'肩部线条', key:true, info:'双手各拿一个2.5kg哑铃，手臂微屈，向两侧抬起到肩膀高度，慢慢放下', sets:4, reps:'12次', rest:'45秒', notes:'★★★ 练出"直角肩"宽度感最关键的动作，抬起时想象把肩膀往两边"撑开"，慢一点做效果更好' },
+      { name:'弹力带反向飞鸟', muscle:'肩后束·上背', key:true, info:'弹力带固定或双手拉住两端，身体前倾，手臂向两侧打开，像展开翅膀，重点收紧肩胛骨', sets:3, reps:'15次', rest:'45秒', notes:'★ 配合侧平举一起练，前后夹住肩膀，让肩线看起来是平的而不是往前耷拉' },
+      { name:'哑铃前平举', muscle:'肩部线条', info:'双手各拿哑铃，手臂伸直向前抬起到肩膀高度，再放下', sets:3, reps:'10次', rest:'45秒', notes:'手臂微屈，不要锁死肘关节' },
+    ],
+    cardio: [],
+    stretches: [
+      { name:'门框胸部拉伸', tag:'拉伸', info:'手臂搭在门框上，身体缓慢向前倾，拉伸胸部前侧', sets:1, reps:'30秒/侧', notes:'练完胸一定要拉伸，避免胸肌变紧把肩膀往前拉' },
+      { name:'肩部拉伸', tag:'拉伸', info:'一只手臂伸直横过胸前，另一只手轻压手肘', sets:1, reps:'30秒/侧', notes:'放松三角肌' },
+      { name:'深呼吸放松', tag:'放松', info:'躺下，双手放腹部，缓慢深呼吸5次，感受身体放松下来', sets:1, reps:'5次呼吸', notes:'给自己一点安静的时间' },
+    ]
+  },
+  day4: {
+    emoji:'🌊', title:'腰腹核心雕刻日', desc:'今天目标是细腰和小腹平坦。注意：不用负重转体这类动作（容易把腰练粗），改用平板支撑、死虫式这类"稳定型"核心训练，收紧腰腹又不会增加围度。',
+    focus:['细腰','小腹平坦'],
+    warmup: [
+      { name:'猫牛式', tag:'热身', info:'四点跪地，缓慢做脊柱屈伸，唤醒核心和腰背', sets:1, reps:'8次', notes:'核心训练前先让腰背热起来' },
+      { name:'原地踏步 + 摆臂', tag:'热身', info:'原地踏步2分钟', sets:1, reps:'2分钟', notes:'轻松的节奏就好' },
+      { name:'骨盆前后倾', tag:'热身', info:'站姿或四点跪姿，缓慢做骨盆前倾后倾，感受下腹发力', sets:1, reps:'10次', notes:'提前找到下腹发力的感觉，对练平坦小腹很有帮助' },
+    ],
+    exercises: [
+      { name:'平板支撑', muscle:'核心', key:true, info:'前臂撑地，身体一条直线，收紧腹部和臀部，不要塌腰或撅屁股', sets:4, reps:'30-45秒', rest:'40秒', notes:'★ 全身收紧的静态动作，瘦腰不增粗的最佳选择之一' },
+      { name:'侧平板支撑', muscle:'腰腹侧线', key:true, info:'侧卧，前臂撑地，身体一条直线撑起，臀部不要下沉', sets:3, reps:'25秒/侧', rest:'40秒', notes:'★ 塑造腰侧线条，比负重转体更安全有效' },
+      { name:'死虫式 Dead Bug', muscle:'下腹·腹横肌', key:true, info:'仰卧，手脚都抬起呈桌面姿势，缓慢伸直对侧手脚再收回，全程腰背贴地不要拱起', sets:3, reps:'12次/侧', rest:'40秒', notes:'★ 练小腹平坦最重要的动作之一，重点是练"腹横肌"这层深层收紧肌肉' },
+      { name:'反向卷腹', muscle:'下腹', info:'仰卧，双腿屈膝抬起，用下腹力量把膝盖往胸口方向卷起，再慢慢放下', sets:3, reps:'15次', rest:'40秒', notes:'专门针对下腹赘肉，动作要慢，别甩腿' },
+      { name:'鸟狗式', muscle:'核心·背部稳定', info:'四点跪姿，同时伸直对侧手臂和腿，保持平衡2秒再换边', sets:3, reps:'10次/侧', rest:'40秒', notes:'顺便帮助改善驼背体态' },
+    ],
+    cardio: [
+      { name:'轻松有氧（可选）', tag:'有氧 · 选做', info:'如果还有余力，跳绳或爬坡10-15分钟，帮助腰腹脂肪代谢', sets:1, reps:'10-15分钟', notes:'核心练得再好，外面盖一层脂肪也看不出线条，有氧负责把这层脂肪减掉' },
+    ],
+    stretches: [
+      { name:'眼镜蛇式', tag:'拉伸', info:'俯卧，双手撑地缓慢抬起上身，腰腹得到伸展', sets:1, reps:'30秒', notes:'核心训练后放松腰部' },
+      { name:'婴儿式', tag:'拉伸', info:'跪坐，身体前倒，手臂向前伸展放松', sets:1, reps:'45秒', notes:'放松腰背' },
+      { name:'深呼吸放松', tag:'放松', info:'躺下，双手放腹部，缓慢深呼吸5次', sets:1, reps:'5次呼吸', notes:'感受腹部随呼吸起伏' },
+    ]
+  },
+  day5: {
+    emoji:'🌸', title:'背部 · 体态矫正日 ②', desc:'体态矫正需要高频刺激才能真正改过来，这周第二次背部专项。感受一下是不是比周一做面拉时更容易找到肩胛骨收紧的感觉了。',
+    focus:['直角肩','改善驼背'],
+    warmup: [
+      { name:'猫牛式', tag:'热身', info:'四点跪地，缓慢做脊柱屈伸', sets:1, reps:'8次', notes:'同样的开场，让身体熟悉节奏' },
+      { name:'肩颈绕环', tag:'热身', info:'双肩向后绕大圈10次，再向前绕10次', sets:1, reps:'各10次', notes:'唤醒肩颈' },
+      { name:'弹力带肩部唤醒', tag:'热身', info:'双手抓弹力带两端，与肩同宽，缓慢向两侧拉开再收回', sets:1, reps:'10次', notes:'轻轻拉，感受肩膀打开' },
+    ],
+    exercises: [
+      { name:'弹力带面拉 Face Pull', muscle:'下斜方肌·肩后束', key:true, info:'弹力带固定在与肩同高处，手肘抬起与肩同高，向后拉向脸的方向，肩胛骨向中间收紧', sets:4, reps:'15次', rest:'45秒', notes:'★★★ 这周第二次，试试比周一多停1秒感受肩胛骨夹紧' },
+      { name:'弹力带坐姿划船', muscle:'背部', info:'坐地上双腿伸直，弹力带绕过脚掌，双手抓两端向后拉，感受肩胛骨收紧', sets:3, reps:'15次', rest:'60秒', notes:'背挺直，不要弓背' },
+      { name:'YTW字母操', muscle:'下斜方肌·菱形肌', key:true, info:'俯卧或前倾站姿，手臂依次摆成Y字、T字、W字形，每个字母抬起手臂停留2秒', sets:3, reps:'各8次', rest:'45秒', notes:'比周一多做2次，动作要慢' },
+      { name:'靠墙天使 Wall Angels', muscle:'肩胛稳定', info:'背贴墙站立，手肘手背贴墙，缓慢向上滑动再放下', sets:3, reps:'15次', rest:'30秒', notes:'感受一下是不是比第一次更贴墙了' },
+      { name:'卷腹', muscle:'腹部', info:'仰卧屈膝，双手交叉放胸前，肩膀离地卷起，再慢慢放下', sets:3, reps:'15次', rest:'40秒', notes:'不用坐起来，肩胛骨离地就够了' },
+    ],
+    cardio: [],
+    stretches: [
+      { name:'上斜方肌拉伸', tag:'拉伸', key:true, info:'坐姿，一只手轻压头部向对侧倾斜，拉开脖子到肩膀那条"斜坡"', sets:1, reps:'30秒/侧', notes:'★ 每天都可以做，抱孩子后立刻做效果更好' },
+      { name:'门框胸部拉伸', tag:'拉伸', info:'手臂搭在门框上，身体缓慢向前倾', sets:1, reps:'30秒/侧', notes:'帮助肩膀归位' },
+      { name:'婴儿式', tag:'拉伸', info:'跪坐，身体前倒，手臂向前伸展', sets:1, reps:'45秒', notes:'放松呼吸' },
+    ]
+  },
+  day6: {
+    emoji:'🔥', title:'全身塑形循环 HIIT', desc:'一周最后一次力量训练，用循环的方式把全身都过一遍，重点是紧致感和燃脂，为周日的休息做准备。',
+    focus:['紧致','燃脂'],
+    warmup: [
+      { name:'原地踏步 + 摆臂', tag:'热身', info:'原地踏步2分钟', sets:1, reps:'2分钟', notes:'把心率慢慢带起来' },
+      { name:'动态全身活动', tag:'热身', info:'开合跳20次 + 高抬腿20次，慢速做', sets:1, reps:'各20次', notes:'循环训练前多热身一点' },
+      { name:'手臂+髋部绕环', tag:'热身', info:'手臂绕环10次，髋部绕环各8次', sets:1, reps:'见描述', notes:'全身关节都活动开' },
+    ],
+    exercises: [
+      { name:'循环组①：靠墙深蹲 + 跪姿俯卧撑', muscle:'腿臀·胸', info:'靠墙深蹲45秒，紧接着跪姿俯卧撑10次，中间不休息，完成算1组', sets:3, reps:'1组=深蹲45秒+俯卧撑10次', rest:'60秒', notes:'循环训练强度较高，做不完可以适当减量' },
+      { name:'循环组②：弹力带臀桥 + 侧平板', muscle:'臀·腰侧', info:'弹力带臀桥15次，紧接着侧平板20秒/侧，中间不休息', sets:3, reps:'1组=臀桥15次+侧平板各20秒', rest:'60秒', notes:'感受臀部和腰侧同时收紧的感觉' },
+      { name:'循环组③：哑铃侧平举 + 平板支撑', muscle:'肩·核心', info:'哑铃侧平举12次，紧接着平板支撑30秒，中间不休息', sets:3, reps:'1组=侧平举12次+平板30秒', rest:'60秒', notes:'这组同时兼顾直角肩和收腹，一周最后冲一冲' },
+    ],
+    cardio: [
+      { name:'收尾燃脂（可选）', tag:'有氧 · 选做', info:'如果还有力气，开合跳/高抬腿间歇做8分钟', sets:1, reps:'8分钟', notes:'量力而行，不勉强' },
+    ],
+    stretches: [
+      { name:'全身拉伸组合', tag:'拉伸', info:'依次做坐姿前屈、蝴蝶式、婴儿式，每个30秒', sets:1, reps:'各30秒', notes:'今天动作多，拉伸不能省' },
+      { name:'上斜方肌拉伸', tag:'拉伸', info:'一只手轻压头部向对侧倾斜', sets:1, reps:'30秒/侧', notes:'照例放松肩颈' },
       { name:'深呼吸放松', tag:'放松', info:'躺下，双手放腹部，缓慢深呼吸5次', sets:1, reps:'5次呼吸', notes:'辛苦一周啦，好好放松一下' },
+    ]
+  },
+  day7: {
+    emoji:'🍃', title:'主动恢复日', desc:'今天不做力量训练，但这套颈肩放松操建议每天都做——尤其是抱孩子之后，直接针对斜方肌高耸的问题。休息日不代表躺平，身体在这天真正完成修复和塑形。',
+    focus:['体态维持','恢复'],
+    warmup: [
+      { name:'颈部四方向拉伸', tag:'放松操', key:true, info:'头部缓慢前倾、后仰、左倾、右倾，每个方向停留15秒，感受脖子和肩膀连接处的拉伸', sets:1, reps:'各15秒', notes:'★ 每天抱完孩子做一次，长期坚持对改善斜坡感最有效' },
+      { name:'肩胛骨收放操', tag:'放松操', info:'耸肩到最高点停2秒，再用力向下沉肩，重复', sets:1, reps:'12次', notes:'专门放松容易紧绷的上斜方肌' },
+      { name:'散步或轻松走动', tag:'活动', info:'户外或室内慢走20-30分钟，不用刻意增加强度', sets:1, reps:'20-30分钟', notes:'低强度活动帮助恢复，也是很好的放松' },
+    ],
+    exercises: [],
+    cardio: [],
+    stretches: [
+      { name:'门框胸部拉伸', tag:'拉伸', info:'手臂搭在门框上，身体缓慢向前倾', sets:1, reps:'30秒/侧', notes:'每天做一点，圆肩会慢慢改善' },
+      { name:'猫牛式', tag:'拉伸', info:'四点跪地，缓慢做脊柱屈伸', sets:1, reps:'8次', notes:'给脊柱一点温柔的活动' },
+      { name:'婴儿式', tag:'拉伸', info:'跪坐，身体前倒，手臂向前伸展', sets:1, reps:'60秒', notes:'今天可以多停留一会儿，好好放松' },
+      { name:'深呼吸放松', tag:'放松', info:'躺下，双手放腹部，缓慢深呼吸8次', sets:1, reps:'8次呼吸', notes:'一周辛苦了，给自己多一点时间' },
     ]
   }
 };
@@ -186,29 +277,35 @@ const PLAN = {
 const INFO_HTML = `
   <div class="info-block peach">
     <h2 class="info-title">写给认真生活的你 🌷</h2>
-    <p>这份计划是按照你现在的情况专门安排的——<b>零基础、一对2.5kg哑铃、弹力带</b>，在家就能完成，不需要去健身房。</p>
-    <p>目标是<b>减脂瘦身</b>，所以核心思路是：动作做对比做多更重要，能坚持下来比强度大更重要。第一周可能会觉得有点累，这是正常的，身体在慢慢适应。</p>
+    <p>这版计划是根据你现在的体态情况专门调整的——重点解决<b>斜方肌高耸、含胸驼背</b>的问题，同时兼顾<b>直角肩、细腰、胸型、小腹平坦</b>这几个目标。</p>
+    <p>频率从原来一周3练升级为<b>一周6练+1天主动恢复</b>，因为体态矫正类的动作（面拉、YTW、划船）需要更高频率的刺激才能真正改变肌肉的"默认状态"。</p>
+  </div>
+  <div class="info-block lilac">
+    <h2 class="info-title">关于"直角肩"，说句实话</h2>
+    <p>直角肩的视觉效果，一部分由<b>锁骨长度和肩峰形状</b>这类骨骼结构决定，这部分训练改变不了。但训练能做的是：<b>强化三角肌中束（侧平举）+ 下斜方肌和菱形肌（面拉、YTW）</b>，同时<b>拉伸放松紧绷的上斜方肌</b>，再加上改善圆肩驼背的体态。这几件事做到位，肩颈那条"斜坡"会有明显改善，肩膀视觉上会更平更宽，但不是每个人都能练出完全的90度直角，这个要如实告诉你，别对着计划死磕，进步比完美更重要。</p>
   </div>
   <div class="info-block">
     <h2 class="info-title">一周节奏</h2>
     <div class="week-grid">
-      <div class="week-day train"><div class="wd-label">周一</div><div class="wd-content">全身<br>唤醒</div></div>
-      <div class="week-day rest"><div class="wd-label">周二</div><div class="wd-content">休息</div></div>
-      <div class="week-day cardio"><div class="wd-label">周三</div><div class="wd-content">有氧+<br>核心</div></div>
-      <div class="week-day rest"><div class="wd-label">周四</div><div class="wd-content">休息</div></div>
-      <div class="week-day train"><div class="wd-label">周五</div><div class="wd-content">塑形<br>巩固</div></div>
-      <div class="week-day rest"><div class="wd-label">周六</div><div class="wd-content">休息</div></div>
-      <div class="week-day rest"><div class="wd-label">周日</div><div class="wd-content">休息</div></div>
+      <div class="week-day train"><div class="wd-label">周一</div><div class="wd-content">背部<br>体态①</div></div>
+      <div class="week-day cardio"><div class="wd-label">周二</div><div class="wd-content">臀腿<br>+HIIT</div></div>
+      <div class="week-day train"><div class="wd-label">周三</div><div class="wd-content">胸型<br>直角肩</div></div>
+      <div class="week-day train"><div class="wd-label">周四</div><div class="wd-content">腰腹<br>核心</div></div>
+      <div class="week-day train"><div class="wd-label">周五</div><div class="wd-content">背部<br>体态②</div></div>
+      <div class="week-day cardio"><div class="wd-label">周六</div><div class="wd-content">全身<br>循环</div></div>
+      <div class="week-day rest"><div class="wd-label">周日</div><div class="wd-content">主动<br>恢复</div></div>
     </div>
-    <p style="margin-top:10px">三天练习，中间都有休息日。零基础阶段身体需要更多恢复时间，不用心急。</p>
+    <p style="margin-top:10px">背部体态动作一周出现2次（周一、周五），这是刻意安排的——矫正体态比单纯增肌需要更高频率。周日不是"什么都不做"，颈肩放松操建议照做。</p>
   </div>
   <div class="info-block">
-    <h2 class="info-title">几个小提醒</h2>
+    <h2 class="info-title">几个重要提醒</h2>
     <ul>
-      <li><b>2.5kg哑铃够用吗？</b>够的。零基础阶段，轻重量配合正确动作就能看到效果，等练习几周觉得轻松了，再考虑加重量</li>
-      <li><b>动作做不到标准怎么办？</b>完全没关系，比如俯卧撑做不了就跪姿做，深蹲蹲浅一点也可以，慢慢进步就好</li>
-      <li><b>多久能看到变化？</b>一般坚持4-6周会感觉衣服变松、体态变好，体重变化因人而异，不用每天称重，一周称一次就够</li>
-      <li><b>累了可以不练吗？</b>身体很累、没睡好、生理期不舒服的时候，可以跳过或者只做拉伸放松，不用勉强</li>
+      <li><b>关于负重转体：</b>原计划里的"俄罗斯转体"这类负重旋转动作已经去掉了，换成平板支撑、死虫式这类静态核心动作——负重扭腰容易让腰变粗，跟细腰的目标是反着来的</li>
+      <li><b>如果最近生产不久：</b>做腹部训练（尤其平板支撑、卷腹）前，建议先自查一下有没有腹直肌分离（网上有简单的自查方法，或产检时问医生），如果有分离，先跳过核心训练部分，等恢复评估通过再加回来，别硬练</li>
+      <li><b>2.5kg哑铃够用吗？</b>够的，练习几周动作轻松了可以考虑加到3-4kg，侧平举和飞鸟这类动作重量不需要很大</li>
+      <li><b>多久能看到体态变化？</b>斜方肌和圆肩这类体态问题，坚持3-4周会感觉肩颈轻松很多，视觉上的改善大概6-8周比较明显，比减脂类的变化需要更多耐心</li>
+      <li><b>标记了★的动作</b>是这套计划里的核心动作，时间不够时可以优先保证这几个，其他动作可以酌情减组数</li>
+      <li><b>累了可以调整吗？</b>身体很累、没睡好的时候，可以把当天的力量训练换成周日的"主动恢复"内容，别硬撑</li>
     </ul>
   </div>
 `;
@@ -217,10 +314,10 @@ let state = loadState();
 let currentDay = state.currentDay || 'day1';
 
 function loadState() {
-  try { const s = localStorage.getItem('wifeWorkoutState'); return s ? JSON.parse(s) : { warmup:{}, exercises:{}, stretches:{}, cardio:{}, currentDay:'day1' }; }
+  try { const s = localStorage.getItem('wifePostureWorkoutState'); return s ? JSON.parse(s) : { warmup:{}, exercises:{}, stretches:{}, cardio:{}, currentDay:'day1' }; }
   catch(e) { return { warmup:{}, exercises:{}, stretches:{}, cardio:{}, currentDay:'day1' }; }
 }
-function saveState() { try { localStorage.setItem('wifeWorkoutState', JSON.stringify(state)); } catch(e){} }
+function saveState() { try { localStorage.setItem('wifePostureWorkoutState', JSON.stringify(state)); } catch(e){} }
 
 function toggleItem(section, dayKey, idx, setIdx) {
   const key = `${section}_${dayKey}_${idx}_${setIdx}`;
@@ -275,7 +372,7 @@ function buildSimpleCard(ex, dayKey, idx, sec, cls, muscleCls) {
     <div class="ex-top">
       <div>
         <h3 class="exercise-name">${ex.name}</h3>
-        <span class="exercise-muscle ${muscleCls}">${ex.tag}</span>
+        <span class="exercise-muscle ${ex.key?'key':muscleCls}">${ex.tag}</span>
       </div>
     </div>
     <div class="how-to">${ex.info}</div>
@@ -295,7 +392,7 @@ function buildExerciseCard(ex, dayKey, idx) {
   }
   return `<div class="exercise ${allDone?'done':''}">
     <h3 class="exercise-name">${ex.name}</h3>
-    <span class="exercise-muscle main">${ex.muscle}</span>
+    <span class="exercise-muscle ${ex.key?'key':'main'}">${ex.muscle}</span>
     <div class="how-to">${ex.info}</div>
     <div class="specs">
       <div class="spec"><div class="spec-label">组数</div><div class="spec-value">${ex.sets}组</div></div>
@@ -308,7 +405,16 @@ function buildExerciseCard(ex, dayKey, idx) {
 }
 
 function render() {
-  const days=[{key:'day1',emoji:'🌸',label:'周一'},{key:'day2',emoji:'🌿',label:'周三'},{key:'day3',emoji:'🍑',label:'周五'},{key:'info',emoji:'💌',label:'说明'}];
+  const days=[
+    {key:'day1',emoji:'🌸',label:'周一'},
+    {key:'day2',emoji:'🍑',label:'周二'},
+    {key:'day3',emoji:'🌷',label:'周三'},
+    {key:'day4',emoji:'🌊',label:'周四'},
+    {key:'day5',emoji:'🌸',label:'周五'},
+    {key:'day6',emoji:'🔥',label:'周六'},
+    {key:'day7',emoji:'🍃',label:'周日'},
+    {key:'info',emoji:'💌',label:'说明'}
+  ];
   document.getElementById('dayTabs').innerHTML = days.map(d=>{
     const complete = d.key!=='info' && isDayComplete(d.key) ? 'completed' : '';
     const active = currentDay===d.key ? 'active' : '';
@@ -329,12 +435,12 @@ function render() {
       <div class="day-banner-label">${day.emoji} TODAY</div>
       <h2 class="day-banner-title">${day.title}</h2>
       <div class="day-banner-desc">${day.desc}</div>
+      <div class="day-banner-focus">${(day.focus||[]).map(f=>`<span class="focus-chip">${f}</span>`).join('')}</div>
       <div class="progress-row"><div class="progress-bar"><div class="progress-fill" style="width:${prog.pct}%"></div></div><span>${prog.done}/${prog.total}</span></div>
     </div>
-    <div class="section-title warmup"><span class="dot"></span>先热热身</div>
+    <div class="section-title warmup"><span class="dot"></span>${day.exercises.length ? '先热热身' : '放松/活动'}</div>
     ${day.warmup.map((ex,i)=>buildSimpleCard(ex,currentDay,i,'warmup','warmup-card','warm')).join('')}
-    <div class="section-title main"><span class="dot"></span>正式训练</div>
-    ${day.exercises.map((ex,i)=>buildExerciseCard(ex,currentDay,i)).join('')}
+    ${day.exercises.length ? `<div class="section-title main"><span class="dot"></span>正式训练</div>${day.exercises.map((ex,i)=>buildExerciseCard(ex,currentDay,i)).join('')}` : ''}
     ${day.cardio.length ? `<div class="section-title cardio"><span class="dot"></span>有氧时间</div>${day.cardio.map((ex,i)=>buildSimpleCard(ex,currentDay,i,'cardio','cardio-card','cardio')).join('')}` : ''}
     <div class="section-title cool"><span class="dot"></span>放松拉伸</div>
     ${day.stretches.map((ex,i)=>buildSimpleCard(ex,currentDay,i,'stretches','cool-card','cool')).join('')}
